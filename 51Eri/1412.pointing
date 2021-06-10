@@ -1,0 +1,94 @@
+# APT Output Product
+# 
+# APT Version: Version 2020.5  
+# Date: Tue Jun 08 15:23:10 GMT 2021
+
+JWST Pointing Report for JWST Approved Proposal 1412 (1412.aptx)
+
+========================================
+* 51 Eri - NIRCam - Roll 1 - MASK430R (Obs 1)
+** Visit 1:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  0    0   0    0 NRCA5_TAMASK430R          1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +97.015 -413.027   +0.000   +0.000 TARGET     T_ACQ          0      0  0.000 (base)
+  1    1   1    1 NRCA5_FULL_TAMASK430R     1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +97.015 -413.027   +0.000   +0.000 TARGET     CONFIRM      102    102  0.000          
+  1    1   2    1 NRCA5_FULL_MASK430R       1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 TARGET     CONFIRM      102    102 12.574          
+  1    1   3    1 NRCA5_MASK430R            1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 TARGET     SCIENCE      685    685  0.000          
+  1    1   4    1 NRCA5_MASK430R            1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 FILTER     SCIENCE     1327   1327  0.000          
+
+========================================
+* 51 Eri - NIRCam - Roll 1 - MASKLWB (Obs 2)
+** Visit 2:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  0    0   0    0 NRCA5_TAMASKLWB           1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +39.297 -412.786   +0.000   +0.000 TARGET     T_ACQ          0      0  0.000 (base)
+  1    1   1    1 NRCA5_FULL_TAMASKLWB      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +39.297 -412.786   +0.000   +0.000 TARGET     CONFIRM      102    102  0.000          
+  1    1   2    1 NRCA5_FULL_MASKLWB_NARROW 1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 TARGET     CONFIRM      102    102  7.924          
+  1    1   3    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 TARGET     SCIENCE      954    954  0.000          
+  1    1   4    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE      954    954  0.000          
+  1    1   5    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE     1402   1402  0.000          
+  1    1   6    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE      954    954  0.000          
+
+========================================
+* Ref star - NIRCam - MASK430R (Obs 3)
+** Visit 3:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  0    0   0    0 NRCA5_TAMASK430R          2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +97.015 -413.027   +0.000   +0.000 TARGET     T_ACQ          0      0  0.000 (base)
+  1    1   1    1 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 TARGET     SCIENCE      286   1354 12.574          
+  1    1   1    2 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.015   +0.015  +87.087 -405.276   +0.015   +0.015 DITHER     SCIENCE      255      0  0.021          
+  1    1   1    3 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   -0.015   +0.015  +87.117 -405.276   -0.015   +0.015 DITHER     SCIENCE      255      0  0.030          
+  1    1   1    4 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   -0.015   -0.015  +87.117 -405.306   -0.015   -0.015 DITHER     SCIENCE      255      0  0.030          
+  1    1   1    5 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.015   -0.015  +87.087 -405.306   +0.015   -0.015 DITHER     SCIENCE      255      0  0.030          
+  1    1   2    1 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 FILTER     SCIENCE      504   2444  0.021          
+  1    1   2    2 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.015   +0.015  +87.087 -405.276   +0.015   +0.015 DITHER     SCIENCE      473      0  0.021          
+  1    1   2    3 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   -0.015   +0.015  +87.117 -405.276   -0.015   +0.015 DITHER     SCIENCE      473      0  0.030          
+  1    1   2    4 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   -0.015   -0.015  +87.117 -405.306   -0.015   -0.015 DITHER     SCIENCE      473      0  0.030          
+  1    1   2    5 NRCA5_MASK430R            2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.015   -0.015  +87.087 -405.306   +0.015   -0.015 DITHER     SCIENCE      473      0  0.030          
+
+========================================
+* Ref star - NIRCam - MASKLWB (Obs 4)
+** Visit 4:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  0    0   0    0 NRCA5_TAMASKLWB           2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +39.297 -412.786   +0.000   +0.000 TARGET     T_ACQ          0      0  0.000 (base)
+  1    1   1    1 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 TARGET     SCIENCE      504   2444  7.924          
+  1    1   1    2 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.020  +38.693 -404.865   +0.000   +0.020 DITHER     SCIENCE      473      0  0.020          
+  1    1   1    3 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.010  +38.693 -404.875   +0.000   +0.010 DITHER     SCIENCE      473      0  0.010          
+  1    1   1    4 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.010  +38.693 -404.895   +0.000   -0.010 DITHER     SCIENCE      473      0  0.020          
+  1    1   1    5 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.020  +38.692 -404.905   +0.000   -0.020 DITHER     SCIENCE      473      0  0.010          
+  1    1   2    1 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE      459   2219  0.020          
+  1    1   2    2 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.020  +38.693 -404.865   +0.000   +0.020 DITHER     SCIENCE      428      0  0.020          
+  1    1   2    3 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.010  +38.693 -404.875   +0.000   +0.010 DITHER     SCIENCE      428      0  0.010          
+  1    1   2    4 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.010  +38.693 -404.895   +0.000   -0.010 DITHER     SCIENCE      428      0  0.020          
+  1    1   2    5 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.020  +38.692 -404.905   +0.000   -0.020 DITHER     SCIENCE      428      0  0.010          
+  1    1   3    1 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE      684   3344  0.020          
+  1    1   3    2 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.020  +38.693 -404.865   +0.000   +0.020 DITHER     SCIENCE      653      0  0.020          
+  1    1   3    3 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.010  +38.693 -404.875   +0.000   +0.010 DITHER     SCIENCE      653      0  0.010          
+  1    1   3    4 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.010  +38.693 -404.895   +0.000   -0.010 DITHER     SCIENCE      653      0  0.020          
+  1    1   3    5 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.020  +38.692 -404.905   +0.000   -0.020 DITHER     SCIENCE      653      0  0.010          
+  1    1   4    1 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE      459   2219  0.020          
+  1    1   4    2 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.020  +38.693 -404.865   +0.000   +0.020 DITHER     SCIENCE      428      0  0.020          
+  1    1   4    3 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   +0.010  +38.693 -404.875   +0.000   +0.010 DITHER     SCIENCE      428      0  0.010          
+  1    1   4    4 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.010  +38.693 -404.895   +0.000   -0.010 DITHER     SCIENCE      428      0  0.020          
+  1    1   4    5 NRCA5_MASKLWB_NARROW      2 HD-30562  +72.15160   -5.67404   +0.000   +0.000   +0.000   -0.020  +38.692 -404.905   +0.000   -0.020 DITHER     SCIENCE      428      0  0.010          
+
+========================================
+* 51 Eri - NIRCam - Roll 2 - MASKLWB (Obs 5)
+** Visit 5:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  0    0   0    0 NRCA5_TAMASKLWB           1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +39.297 -412.786   +0.000   +0.000 TARGET     T_ACQ          0      0  0.000 (base)
+  1    1   1    1 NRCA5_FULL_TAMASKLWB      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +39.297 -412.786   +0.000   +0.000 TARGET     CONFIRM      102    102  0.000          
+  1    1   2    1 NRCA5_FULL_MASKLWB_NARROW 1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 TARGET     CONFIRM      102    102  7.924          
+  1    1   3    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 TARGET     SCIENCE      954    954  0.000          
+  1    1   4    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE      954    954  0.000          
+  1    1   5    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE     1402   1402  0.000          
+  1    1   6    1 NRCA5_MASKLWB_NARROW      1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +38.693 -404.885   +0.000   +0.000 FILTER     SCIENCE      954    954  0.000          
+
+========================================
+* 51 Eri - NIRCam - Roll 2 - MASK430R (Obs 6)
+** Visit 6:1
+Tar Tile Exp Dith Aperture Name             Target       RA         Dec        BaseX    BaseY    DithX    DithY    V2       V3       IdlX     IdlY   Level      Type      ExPar  DkPar   dDist          
+  0    0   0    0 NRCA5_TAMASK430R          1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +97.015 -413.027   +0.000   +0.000 TARGET     T_ACQ          0      0  0.000 (base)
+  1    1   1    1 NRCA5_FULL_TAMASK430R     1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +97.015 -413.027   +0.000   +0.000 TARGET     CONFIRM      102    102  0.000          
+  1    1   2    1 NRCA5_FULL_MASK430R       1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 TARGET     CONFIRM      102    102 12.574          
+  1    1   3    1 NRCA5_MASK430R            1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 TARGET     SCIENCE      685    685  0.000          
+  1    1   4    1 NRCA5_MASK430R            1 51-ERI    +69.40055   -2.47355   +0.000   +0.000   +0.000   +0.000  +87.102 -405.291   +0.000   +0.000 FILTER     SCIENCE     1327   1327  0.000          
+
+

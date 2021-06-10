@@ -1,0 +1,85 @@
+paths:
+     wdir: HR8799/ # working directory
+     pmdir: pmags/ # planet magnitudes directory (sub-directory of wdir)
+     pynrc_data_dir: pynrc_data/ # directory for pyNRC data (sub-directory of wdir)
+     pynrc_figs_dir: pynrc_figs/ # directory for pyNRC figures (sub-directory of wdir)
+     mirage_refs_dir: mirage_refs/ # directory for MIRAGE reference files
+     mirage_cats_dir: mirage_cats/ # directory for MIRAGE catalogs (sub-directory of wdir)
+     mirage_logs_dir: mirage_logs/ # directory for MIRAGE logs (sub-directory of wdir)
+     mirage_data_dir: mirage_data/ # directory for MIRAGE data (sub-directory of wdir)
+     jwst_data_dir: jwst_data/ # directory for JWST data (sub-directory of wdir)
+     species_dir: /Users/jkammerer/Documents/Code/species
+     whereistheplanet_dir: /Users/jkammerer/Documents/Code/whereistheplanet
+     webbpsf_ext_dir: /Users/jkammerer/Documents/Code/webbpsf_ext
+     pynrc_dir: /Users/jkammerer/Documents/Code/pynrc
+apt:
+     xml_path: 1194.xml # within wdir
+     pointing_path: 1194.pointing # within wdir
+observation:
+     date: 2022-11-05T00:00:00
+     pa1: 92.0 # deg
+     pa2: 85.0 # deg
+     wfe_drift0: 0.0 # nm
+     wfe_ref_drift: 5.0 # nm
+     wfe_roll_drift: 10.0 # nm
+     bar_offset: 8.0 # arcsec, only used by bar masks
+     oversample: 2
+     # observation numbers from APT
+     # an observing sequence consists of roll 1, roll 2, ref
+     sequences:
+          s1: 1,6,3
+          s2: 2,5,4
+sources:
+     sci:
+          name: HR8799
+          dist: 41.3 # pc
+          age: 30.0 # Myr
+          sptype: F0V
+          teff: 7430.0 # K
+          feh: -0.52 # dex
+          logg: 4.35
+          kmag: 5.24 # mag (2MASS Ks)
+     ref:
+          name: HD220657
+          sptype: F8III
+          teff: 6061.0 # K
+          feh: -0.01 # dex
+          logg: 3.22
+          kmag: 3.04 # mag (2MASS Ks)
+# name_witp = name in whereistheplanet
+# a list of available companions can be found at https://github.com/semaphoreP/whereistheplanet/blob/master/whereistheplanet/whereistheplanet.py
+# name_spec = name in species
+# a list of available companions can be found at https://github.com/tomasstolker/species/blob/master/species/data/companions.py
+companions:
+     c1:
+          name_witp: hr8799b
+          name_spec: HR 8799 b
+          ra_off:
+          de_off:
+          mass: 10.0 # M_Jupiter
+          sent: 13.0 # kB/baryon
+     c2:
+          name_witp: hr8799c
+          name_spec: HR 8799 c
+          ra_off:
+          de_off:
+          mass: 10.0 # M_Jupiter
+          sent: 13.0 # kB/baryon
+     c3:
+          name_witp: hr8799d
+          name_spec: HR 8799 d
+          ra_off:
+          de_off:
+          mass: 10.0 # M_Jupiter
+          sent: 13.0 # kB/baryon
+     c4:
+          name_witp: hr8799e
+          name_spec: HR 8799 e
+          ra_off:
+          de_off:
+          mass: 10.0 # M_Jupiter
+          sent: 13.0 # kB/baryon
+pipeline:
+     model_spec: exo-rem
+     teff_range: 1000.0,2000.0
+     make_plots: True
