@@ -8,9 +8,6 @@ matplotlib.rcParams.update({'font.size': 14})
 # IMPORTS
 # =============================================================================
 
-import yaml
-config = yaml.load(open('config.yaml'), Loader=yaml.BaseLoader)
-
 import astropy.io.fits as pyfits
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,7 +16,7 @@ import os
 os.environ['CRDS_PATH'] = 'crds_cache'
 os.environ['CRDS_SERVER_URL'] = 'https://jwst-crds.stsci.edu'
 
-import utils
+import util
 
 from jwst.pipeline import Coron3Pipeline
 
@@ -28,25 +25,12 @@ from jwst.pipeline import Coron3Pipeline
 # PARAMETERS
 # =============================================================================
 
-# Observing setup.
-xml_path = config['paths']['wdir']+config['apt']['xml_path']
-keys = config['observation']['sequences'].keys()
-seqs = []
-sets = []
-for key in keys:
-    seqs += [config['observation']['sequences'][key].split(',')]
-    sets += [utils.read_from_xml(xml_path, seqs[-1])]
-
-# Find sci and ref observations.
-scis = []
-refs = []
-for i in range(len(sets)):
-    scis += sets[i]['nums'][0:2]
-    refs += [sets[i]['nums'][2]]
+# Read config.
+config = util.config()
 
 # JWST data directories.
-jdir = config['paths']['wdir']+config['paths']['jwst_s1s2_data_dir']
-odir = config['paths']['wdir']+config['paths']['jwst_s3_data_dir']
+jdir = config.paths['wdir']+config.paths['jwst_s1s2_data_dir']
+odir = config.paths['wdir']+config.paths['jwst_s3_data_dir']
 if (not os.path.exists(odir)):
     os.makedirs(odir)
 
@@ -59,76 +43,17 @@ if (not os.path.exists(odir)):
 jfiles = [f for f in os.listdir(jdir) if f.endswith('nrca5_calints.fits')]
 jfiles = sorted(jfiles)
 
-# # Go through all JWST files.
-# for i in range(len(jfiles)):
-#     print('Reducing '+jfiles[i])
-#     num = int(jfiles[i][7:10])
-#     for j in range(len(sets)):
-#         if (num in sets[j]['nums']):
-#             break
-#     ww = np.where(num == np.array(sets[j]['nums']))[0][0]
-    
-#     # Skip Target Acquisition and Astrometric Confirmation images.
-#     if (sets[j]['astro'][ww] == 'false'):
-#         skip = [1]
-#     else:
-#         skip = [1, 2, 3]
-#     if (int(jfiles[i][20:25]) not in skip):
-#         hdul = pyfits.open(jdir+jfiles[i])
-#         filt = hdul[0].header['FILTER']
-#         ww = np.where(filt == np.array(sets[j]['filts']))[0][0]
-        
-#         print('   Updating header keywords')
-        
-#         # Fix coronagraphy header keywords.
-#         if ((sets[j]['masks'][ww] == 'MASK210R') and (sets[j]['subs'][ww] == 640)):
-#             hdul[0].header['SUBARRAY'] = 'SUB640A210R'
-#         elif ((sets[j]['masks'][ww] == 'MASK335R') and (sets[j]['subs'][ww] == 320)):
-#             hdul[0].header['SUBARRAY'] = 'SUB320A335R'
-#         elif ((sets[j]['masks'][ww] == 'MASK430R') and (sets[j]['subs'][ww] == 320)):
-#             hdul[0].header['SUBARRAY'] = 'SUB320A430R'
-#         elif ((sets[j]['masks'][ww] == 'MASKSWB') and (sets[j]['subs'][ww] == 640)):
-#             hdul[0].header['SUBARRAY'] = 'SUB640ASWB'
-#         elif ((sets[j]['masks'][ww] == 'MASKLWB') and (sets[j]['subs'][ww] == 320)):
-#             hdul[0].header['SUBARRAY'] = 'SUB320ALWB'
-#         else:
-#             raise UserWarning('Does not support pupil mask '+sets[j]['masks'][ww]+' with '+sets[j]['subs'][ww]+' subarray')
-        
-#         hdul.writeto(jdir+jfiles[i], output_verify='fix', overwrite=True)
-#         hdul.close()
-    
-#     else:
-#         print('   Skipping because Target Acquisition or Astrometric Confirmation image')
-
 # Make ASN files.
 afiles = []
 program = jfiles[0][2:7]
 asn_id = 'c0000'
 target = 't000'
-for i in range(len(seqs)):
-    for j in range(len(sets[i]['filts'])):
-        if (sets[i]['pups'][j] == 'CIRCLYOT'):
-            mask = 'MASKRND'
-        elif (sets[i]['pups'][j] == 'WEDGELYOT'):
-            mask = 'MASKBAR'
-        else:
-            raise UserWarning('Does not support pupil mask '+sets[i]['pups'][j])
-        if ((sets[i]['masks'][j] == 'MASK210R') and (sets[i]['subs'][j] == 640)):
-            subarray = 'SUB640A210R'
-        elif ((sets[i]['masks'][j] == 'MASK335R') and (sets[i]['subs'][j] == 320)):
-            subarray = 'SUB320A335R'
-        elif ((sets[i]['masks'][j] == 'MASK430R') and (sets[i]['subs'][j] == 320)):
-            subarray = 'SUB320A430R'
-        elif ((sets[i]['masks'][j] == 'MASKSWB') and (sets[i]['subs'][j] == 640)):
-            subarray = 'SUB640ASWB'
-        elif ((sets[i]['masks'][j] == 'MASKLWB') and (sets[i]['subs'][j] == 320)):
-            subarray = 'SUB320ALWB'
-        else:
-            raise UserWarning('Does not support pupil mask '+sets[i]['masks'][j]+' with subarray '+str(sets[i]['subs'][j]))
-        roll1files = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and 'jw0119400'+str(seqs[i][0])+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == sets[i]['filts'][j])]
-        roll2files = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and 'jw0119400'+str(seqs[i][1])+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == sets[i]['filts'][j])]
-        reffiles = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and 'jw0119400'+str(seqs[i][2])+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == sets[i]['filts'][j])]
-        afiles += ['seq_%03.0f' % (i+1)+'_filt_'+sets[i]['filts'][j]+'.asn']
+for i in range(len(config.obs['filter'])):
+    for j in range(len(config.obs['filter'][i][0])):
+        roll1files = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and '%03.0f' % config.obs['num'][i][0]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+        roll2files = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and '%03.0f' % config.obs['num'][i][1]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+        reffiles = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and '%03.0f' % config.obs['num'][i][2]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+        afiles += ['seq_%03.0f' % (i+1)+'_filt_'+config.obs['filter'][i][0][j]+'.asn']
         f = open(odir+afiles[-1], 'w')
         f.write('{"asn_type": "coron3",\n')
         f.write(' "asn_rule": "candidate_Asn_Coron",\n')
@@ -137,7 +62,7 @@ for i in range(len(seqs)):
         f.write(' "target": "'+target+'",\n')
         f.write(' "asn_pool": "jw'+program+'_00000000T000000_pool",\n')
         f.write(' "products": [\n')
-        name = 'jw'+program+'-'+asn_id+'_'+target+'_nircam_'+sets[i]['filts'][j]+'-'+mask+'-'+subarray
+        name = 'jw'+program+'-'+asn_id+'_'+target+'_nircam_'+config.obs['filter'][i][0][j]+'-'+config.obs['pupil'][i][0]+'-'+config.obs['subarray'][i][0]
         f.write('     {"name": "'+name.lower()+'",\n')
         f.write('      "members": [\n')
         for k in range(len(roll1files)):

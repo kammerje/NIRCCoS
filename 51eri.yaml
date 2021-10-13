@@ -18,12 +18,12 @@ apt:
      pointing_path: 1412.pointing # within wdir
 observation:
      date: 2022-10-20T00:00:00
-     pa1: 294.0 # deg
-     pa2: 281.0 # deg
-     wfe_drift0: 0.0 # nm
-     wfe_ref_drift: 5.0 # nm
-     wfe_roll_drift: 10.0 # nm
-     bar_offset: 8.0 # arcsec, only used by bar masks
+     pa_roll1: 294.0 # deg
+     pa_roll2: 281.0 # deg
+     pa_ref: 294.0 # deg
+     wfe_drift_roll1: 0.0 # nm
+     wfe_drift_roll2: 10.0 # nm
+     wfe_drift_ref: 5.0 # nm
      oversample: 2
      # observation numbers from APT
      # an observing sequence consists of roll 1, roll 2, ref
@@ -55,8 +55,6 @@ companions:
      c1:
           name_witp: 51erib
           name_spec: 51 Eri b
-          ra_off: 0.0 # mas
-          de_off: 0.0 # mas
           mass: 2.6 # M_Jupiter
           sent: 10.0 # kB/baryon
 pipeline:

@@ -8,9 +8,6 @@ matplotlib.rcParams.update({'font.size': 14})
 # IMPORTS
 # =============================================================================
 
-import yaml
-config = yaml.load(open('config.yaml'), Loader=yaml.BaseLoader)
-
 import astropy.io.fits as pyfits
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,13 +16,18 @@ import os
 
 from mirage.reference_files import downloader
 
+import util
+
 
 # =============================================================================
 # REF MIRAGE
 # =============================================================================
 
+# Read config.
+config = util.config()
+
 # Download MIRAGE reference files.
-download_path = config['paths']['mirage_refs_dir']
+download_path = config.paths['mirage_refs_dir']
 if (not os.path.exists(download_path)):
     os.makedirs(download_path)
 downloader.download_reffiles(download_path,

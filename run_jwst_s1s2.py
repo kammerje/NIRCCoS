@@ -8,9 +8,6 @@ matplotlib.rcParams.update({'font.size': 14})
 # IMPORTS
 # =============================================================================
 
-import yaml
-config = yaml.load(open('config.yaml'), Loader=yaml.BaseLoader)
-
 import astropy.io.fits as pyfits
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,7 +16,10 @@ import os
 os.environ['CRDS_PATH'] = 'crds_cache'
 os.environ['CRDS_SERVER_URL'] = 'https://jwst-crds.stsci.edu'
 
-import utils
+import util
+
+from astropy import units as u
+from astropy.coordinates import SkyCoord
 
 from jwst.pipeline import Detector1Pipeline, Image2Pipeline
 
@@ -28,25 +28,12 @@ from jwst.pipeline import Detector1Pipeline, Image2Pipeline
 # PARAMETERS
 # =============================================================================
 
-# Observing setup.
-xml_path = config['paths']['wdir']+config['apt']['xml_path']
-keys = config['observation']['sequences'].keys()
-seqs = []
-sets = []
-for key in keys:
-    seqs += [config['observation']['sequences'][key].split(',')]
-    sets += [utils.read_from_xml(xml_path, seqs[-1])]
-
-# Find sci and ref observations.
-scis = []
-refs = []
-for i in range(len(sets)):
-    scis += sets[i]['nums'][0:2]
-    refs += [sets[i]['nums'][2]]
+# Read config.
+config = util.config()
 
 # MIRAGE and JWST data directories.
-mdir = config['paths']['wdir']+config['paths']['mirage_data_dir']
-odir = config['paths']['wdir']+config['paths']['jwst_s1s2_data_dir']
+mdir = config.paths['wdir']+config.paths['mirage_data_dir']
+odir = config.paths['wdir']+config.paths['jwst_s1s2_data_dir']
 if (not os.path.exists(odir)):
     os.makedirs(odir)
 
@@ -63,18 +50,20 @@ mfiles = sorted(mfiles)
 for i in range(len(mfiles)):
     print('Reducing '+mfiles[i])
     num = int(mfiles[i][7:10])
-    for j in range(len(sets)):
-        if (num in sets[j]['nums']):
+    ind = int(mfiles[i][20:25])
+    for j in range(len(config.obs['num'])):
+        if (num in config.obs['num'][j]):
             break
-    ww = np.where(num == np.array(sets[j]['nums']))[0][0]
+    if (j >= len(config.obs['num'])):
+        raise UserWarning('MIRAGE file '+mfiles[i]+' cannot be matched to an observation in the APT file')
+    ww = np.where(num == np.array(config.obs['num'][j]))[0][0]
     
     # Skip Target Acquisition and Astrometric Confirmation images.
-    if (sets[j]['astro'][ww] == 'false'):
+    if (config.obs['conf'][j][ww] == False):
         skip = [1]
     else:
         skip = [1, 2, 3]
-    if (int(mfiles[i][20:25]) not in skip):
-        
+    if (ind not in skip):
         print('   Running through JWST data reduction pipeline')
         
         # Initialize Detector1Pipeline.
@@ -152,11 +141,12 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result1.jump.skip = False
         result1.jump.save_results = False
-        result1.jump.rejection_threshold = 4.
+        # result1.jump.rejection_threshold = 4.
+        result1.jump.rejection_threshold = 200.
         result1.jump.maximum_cores = 'none'
         result1.jump.flag_4_neighbors = True
-        result1.jump.max_jump_to_flag_neighbors = 200.
-        result1.jump.min_jump_to_flag_neighbors = 10.
+        # result1.jump.max_jump_to_flag_neighbors = 200.
+        # result1.jump.min_jump_to_flag_neighbors = 10.
         
         # 9 Slope fitting.
         # - SCI gets collapsed along ngroup axis.
