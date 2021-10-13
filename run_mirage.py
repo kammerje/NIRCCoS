@@ -23,7 +23,7 @@ os.environ['CRDS_SERVER_URL'] = 'https://jwst-crds.stsci.edu'
 import utils
 
 from mirage import imaging_simulator
-from mirage.catalogs import catalog_generator, create_catalog
+from mirage.catalogs import catalog_generator
 from mirage.yaml import yaml_generator
 
 
@@ -58,6 +58,7 @@ for i in range(len(sets)):
 filts = []
 for i in range(len(sets)):
     filts += sets[i]['filts']
+filts += ['F335M']
 filts = np.unique(filts)
 
 # Set output directories.
@@ -135,6 +136,7 @@ for yaml_file in yaml_files:
     with open(yaml_file, 'w') as file:
         yaml.safe_dump(temp, file, default_flow_style=False)
     
+    # Simulate the images.
     im = imaging_simulator.ImgSim()
     im.paramfile = yaml_file
     im.create()

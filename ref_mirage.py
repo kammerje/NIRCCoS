@@ -24,6 +24,7 @@ from mirage.reference_files import downloader
 # REF MIRAGE
 # =============================================================================
 
+# Download MIRAGE reference files.
 download_path = config['paths']['mirage_refs_dir']
 if (not os.path.exists(download_path)):
     os.makedirs(download_path)
@@ -35,7 +36,14 @@ downloader.download_reffiles(download_path,
                              skip_cosmic_rays=False,
                              skip_psfs=False)
 
-os.rename(download_path+'mirage_data/nircam/darks/linearized/ALONG/', download_path+'mirage_data/nircam/darks/linearized/A5/')
-os.rename(download_path+'mirage_data/nircam/darks/linearized/BLONG/', download_path+'mirage_data/nircam/darks/linearized/B5/')
+# Fix issue with folder name occuring with old version of MIRAGE.
+try:
+    os.rename(download_path+'mirage_data/nircam/darks/linearized/ALONG/', download_path+'mirage_data/nircam/darks/linearized/A5/')
+except:
+    pass
+try:
+    os.rename(download_path+'mirage_data/nircam/darks/linearized/BLONG/', download_path+'mirage_data/nircam/darks/linearized/B5/')
+except:
+    pass
 
 print('DONE')

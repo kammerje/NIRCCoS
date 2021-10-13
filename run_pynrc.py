@@ -70,8 +70,7 @@ obs_time = datetime.datetime(int(time[0:4]),
                              int(time[14:16]),
                              int(time[17:19]))
 
-# Companion locations.
-# Companion locations on observation date. RA offset needs to be inverted!
+# Companion locations on observation date.
 keys = config['companions'].keys()
 tags = []
 locs = []
@@ -79,9 +78,12 @@ for key in keys:
     tags += [config['companions'][key]['name_witp']]
     try:
         temp = whereistheplanet.predict_planet(tags[-1], time_mjd=t.mjd)
-        locs += [(-temp[0][0]/1e3, temp[1][0]/1e3)]
+        # locs += [(-temp[0][0]/1e3, temp[1][0]/1e3)]
+        locs += [(temp[0][0]/1e3, temp[1][0]/1e3)]
     except:
-        locs += [(float(config['companions'][key]['ra_off']), (float(config['companions'][key]['de_off'])))]
+        locs += [(float(config['companions'][key]['ra_off'])/1e3, float(config['companions'][key]['de_off'])/1e3)]
+        print('Companion '+tags[-1]+' is not in whereistheplanet, using offset from config file')
+        print('RA = %.3f mas, DEC = %.3f mas' % (locs[-1][0], locs[-1][1]))
 
 # Companion magnitudes.
 pmdir = config['paths']['wdir']+config['paths']['pmdir']
@@ -138,6 +140,16 @@ sp_sci.name = name_sci
 sp_ref = pynrc.stellar_spectrum(sptype_ref, kmag_ref, 'vegamag', bp_ref, Teff=teff_ref, metallicity=feh_ref, log_g=logg_ref)
 sp_ref.name = name_ref
 
+# # Ramp optimization.
+# pl = pynrc.planets_sb12(atmo='hy3s', mass=mass[0], age=age_sci, entropy=sent[0], distance=dist_sci)
+# sp_pl = pl.export_pysynphot()
+# bp_pl = pynrc.read_filter(sets[0]['filts'][0])
+# temp = np.load(pmdir+tags[0]+'_'+sets[0]['filts'][0]+'.npy')[0]
+# sp_pl = sp_pl.renorm(temp, 'vegamag', bp_pl)
+# nrc = pynrc.NIRCam(sets[0]['filts'][0], pupil=sets[0]['pups'][0], mask=sets[0]['masks'][0], wind_mode=sets[0]['wind'][0], xpix=sets[0]['subs'][0], ypix=sets[0]['subs'][0])
+# res = nrc.ramp_optimize(sp_pl, sp_bright=sp_sci, tacq_max=3600, tacq_frac=0.05, even_nints=True, verbose=True)
+# import pdb; pdb.set_trace()
+
 # Plot source spectra.
 if (make_plots == True):
     bp = pynrc.read_filter(sets[0]['filts'][0], sets[0]['pups'][0], sets[0]['masks'][0])
@@ -174,7 +186,7 @@ if (make_plots == True):
 nobs = len(sets)
 ctr1 = 0
 for i in range(nobs):
-    print('Simulating observation '+str(i+1))
+    print('Simulating sequence '+str(i+1))
     nfilts = len(sets[i]['filts'])
     ctr2 = 0
     for j in range(nfilts):
@@ -215,7 +227,8 @@ for i in range(nobs):
             f, ax = plt.subplots(1, 1, figsize=(6.4, 6.4))
             xasec = obs.det_info['xpix']*obs.pix_scale # arcsec
             yasec = obs.det_info['ypix']*obs.pix_scale # arcsec
-            extent = [-xasec/2., xasec/2., -yasec/2., yasec/2.] # arcsec
+            # extent = [-xasec/2., xasec/2., -yasec/2., yasec/2.] # arcsec
+            extent = [xasec/2., -xasec/2., -yasec/2., yasec/2.] # arcsec
             xylim = 3. # arcsec
             xlim = ylim = np.array([-1, 1])*xylim
             ax.imshow(im_planets, extent=extent, vmin=0., vmax=0.75*np.nanmax(im_planets))
@@ -230,9 +243,11 @@ for i in range(nobs):
                 xc, yc = deepcopy(loc)
                 xc, yc = nrc_utils.xy_rot(xc, yc, PA1)
                 xc += xc_off
-                circle = Circle((xc, yc), radius=xylim/15., lw=1., edgecolor='red', facecolor='none')
+                # circle = Circle((xc, yc), radius=xylim/15., lw=1., edgecolor='red', facecolor='none')
+                circle = Circle((-xc, yc), radius=xylim/15., lw=1., edgecolor='red', facecolor='none')
                 ax.add_artist(circle)
-            ax.set_xlim(xlim+xc_off)
+            # ax.set_xlim(xlim+xc_off)
+            ax.set_xlim(xlim-xc_off)
             ax.set_ylim(ylim)
             ax.set_xlabel('Arcsec')
             ax.set_ylabel('Arcsec')
@@ -240,7 +255,8 @@ for i in range(nobs):
             ax.tick_params(axis='both', color='white', which='both')
             for k in ax.spines.keys():
                 ax.spines[k].set_color('white')
-            nrc_utils.plotAxes(ax, width=1., headwidth=5., alength=0.15, angle=PA1, position=(0.9, 0.9), label1='E', label2='N')
+            # nrc_utils.plotAxes(ax, width=1., headwidth=5., alength=0.15, angle=PA1, position=(0.9, 0.9), label1='E', label2='N')
+            nrc_utils.plotAxes(ax, width=1., headwidth=5., alength=0.15, angle=PA1, position=(0.7, 0.7), label1='E', label2='N', dir1=[1, 0], dir2=[0, -1])
             plt.tight_layout()
             plt.savefig(fdir+'seq_%03.0f_filt_' % i+sets[i]['filts'][j]+'_planets.pdf')
             plt.close()
@@ -258,7 +274,8 @@ for i in range(nobs):
                 ax = [ax]
             xasec = obs.det_info['xpix']*obs.pix_scale # arcsec
             yasec = obs.det_info['ypix']*obs.pix_scale # arcsec
-            extent = [-xasec/2., xasec/2., -yasec/2., yasec/2.] # arcsec
+            # extent = [-xasec/2., xasec/2., -yasec/2., yasec/2.] # arcsec
+            extent = [xasec/2., -xasec/2., -yasec/2., yasec/2.] # arcsec
             xylim = 2.5 # arcsec
             xlim = ylim = np.array([-1, 1])*xylim
             for k, wfe_drift in enumerate(wfe_drifts):
@@ -268,7 +285,8 @@ for i in range(nobs):
                     xc, yc = deepcopy(loc)
                     circle = Circle((xc, yc), radius=xylim/15., lw=1., edgecolor='red', facecolor='none')
                     ax[k].add_artist(circle)
-                ax[k].set_xlim(xlim)
+                # ax[k].set_xlim(xlim)
+                ax[k].set_xlim(-xlim)
                 ax[k].set_ylim(ylim)
                 ax[k].set_xlabel('Arcsec')
                 ax[k].set_ylabel('Arcsec')
@@ -316,6 +334,8 @@ for i in range(nobs):
         
         # Roll 1.
         if (sets[i]['dithers'][0] == 'NONE'):
+            
+            # Generate noiseless slope image.
             im_slope = obs.gen_slope_image(PA=PA1,
                                            exclude_disk=True,
                                            exclude_planets=False,
@@ -329,7 +349,9 @@ for i in range(nobs):
                                            wfe_roll_drift=wfe_roll_drift)
             det = obs.Detectors[0]
             im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
-            file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][0]+sets[i]['filts'][j]+'.fits'
+            
+            # Convert slope to ramp (the ramp will be saved automatically).
+            file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][0]+sets[i]['filts'][j]+'_ramp.fits'
             hdul = slope_to_ramp(det,
                                  im_slope=im_slope,
                                  out_ADU=True,
@@ -343,11 +365,19 @@ for i in range(nobs):
                                  bias=True,
                                  det_noise=True,
                                  return_results=True)
+            
+            # Save noiseless slope image.
+            hdul['SCI'].data = im_slope
+            hdul.pop(2)
+            hdul.writeto(file_out[:-9]+'nlslope.fits', output_verify='fix', overwrite=True)
+        
         else:
             raise UserWarning('Does not support dither pattern '+sets[i]['dithers'][0]+' for roll 1')
         
         # Roll 2.
         if (sets[i]['dithers'][1] == 'NONE'):
+            
+            # Generate noiseless slope image.
             im_slope = obs.gen_slope_image(PA=PA2,
                                            exclude_disk=True,
                                            exclude_planets=False,
@@ -361,7 +391,9 @@ for i in range(nobs):
                                            wfe_roll_drift=wfe_roll_drift)
             det = obs.Detectors[0]
             im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
-            file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][1]+sets[i]['filts'][j]+'.fits'
+            
+            # Convert slope to ramp (the ramp will be saved automatically).
+            file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][1]+sets[i]['filts'][j]+'_ramp.fits'
             hdul = slope_to_ramp(det,
                                  im_slope=im_slope,
                                  out_ADU=True,
@@ -375,11 +407,19 @@ for i in range(nobs):
                                  bias=True,
                                  det_noise=True,
                                  return_results=True)
+            
+            # Save noiseless slope image.
+            hdul['SCI'].data = im_slope
+            hdul.pop(2)
+            hdul.writeto(file_out[:-9]+'nlslope.fits', output_verify='fix', overwrite=True)
+        
         else:
             raise UserWarning('Does not support dither pattern '+sets[i]['dithers'][1]+' for roll 2')
         
         # Reference.
         if (sets[i]['dithers'][2] == 'NONE'):
+            
+            # Generate noiseless slope image.
             im_slope = obs.gen_slope_image(PA=PA1,
                                            exclude_disk=True,
                                            exclude_planets=True,
@@ -393,7 +433,9 @@ for i in range(nobs):
                                            wfe_roll_drift=wfe_roll_drift)
             det = obs.Detectors[0]
             im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
-            file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][2]+sets[i]['filts'][j]+'.fits'
+            
+            # Convert slope to ramp (the ramp will be saved automatically).
+            file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][2]+sets[i]['filts'][j]+'_ramp.fits'
             hdul = slope_to_ramp(det,
                                  im_slope=im_slope,
                                  out_ADU=True,
@@ -407,6 +449,12 @@ for i in range(nobs):
                                  bias=True,
                                  det_noise=True,
                                  return_results=True)
+            
+            # Save noiseless slope image.
+            hdul['SCI'].data = im_slope
+            hdul.pop(2)
+            hdul.writeto(file_out[:-9]+'nlslope.fits', output_verify='fix', overwrite=True)
+        
         else:
             if (sets[i]['dithers'][2] == '5-POINT-BOX'):
                 dithers = [(0., 0.), (15., 15.), (-15., 15.), (-15., -15.), (15., -15.)] # mas
@@ -421,6 +469,8 @@ for i in range(nobs):
             else:
                 raise UserWarning('Does not support dither pattern '+sets[i]['dithers'][2]+' for reference')
             for k in range(len(dithers)):
+                
+                # Generate noiseless slope image.
                 im_slope = obs.gen_slope_image(PA=PA1,
                                                exclude_disk=True,
                                                exclude_planets=True,
@@ -433,9 +483,11 @@ for i in range(nobs):
                                                wfe_ref_drift=wfe_ref_drift,
                                                wfe_roll_drift=wfe_roll_drift,
                                                dither=dithers[k])
-                det = obs.Detectors[0]
+                det = obs.nrc_ref.Detectors[0]
                 im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
-                file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][2]+sets[i]['filts'][j]+'_dpos_%03.0f' % k+'.fits'
+                
+                # Convert slope to ramp (the ramp will be saved automatically).
+                file_out = odir+'obs_%03.0f_filt_' % sets[i]['nums'][2]+sets[i]['filts'][j]+'_dpos_%03.0f' % k+'_ramp.fits'
                 hdul = slope_to_ramp(det,
                                      im_slope=im_slope,
                                      out_ADU=True,
@@ -449,5 +501,10 @@ for i in range(nobs):
                                      bias=True,
                                      det_noise=True,
                                      return_results=True)
+                
+                # Save noiseless slope image.
+                hdul['SCI'].data = im_slope
+                hdul.pop(2)
+                hdul.writeto(file_out[:-9]+'nlslope.fits', output_verify='fix', overwrite=True)
     
 print('DONE')

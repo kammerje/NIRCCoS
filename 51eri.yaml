@@ -7,7 +7,8 @@ paths:
      mirage_cats_dir: mirage_cats/ # directory for MIRAGE catalogs (sub-directory of wdir)
      mirage_logs_dir: mirage_logs/ # directory for MIRAGE logs (sub-directory of wdir)
      mirage_data_dir: mirage_data/ # directory for MIRAGE data (sub-directory of wdir)
-     jwst_data_dir: jwst_data/ # directory for JWST data (sub-directory of wdir)
+     jwst_s1s2_data_dir: jwst_s1s2_data/ # directory for JWST data (sub-directory of wdir)
+     jwst_s3_data_dir: jwst_s3_data/ # directory for JWST data (sub-directory of wdir)
      species_dir: /Users/jkammerer/Documents/Code/species
      whereistheplanet_dir: /Users/jkammerer/Documents/Code/whereistheplanet
      webbpsf_ext_dir: /Users/jkammerer/Documents/Code/webbpsf_ext
@@ -54,8 +55,8 @@ companions:
      c1:
           name_witp: 51erib
           name_spec: 51 Eri b
-          ra_off:
-          de_off:
+          ra_off: 0.0 # mas
+          de_off: 0.0 # mas
           mass: 2.6 # M_Jupiter
           sent: 10.0 # kB/baryon
 pipeline:

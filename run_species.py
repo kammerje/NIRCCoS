@@ -25,7 +25,7 @@ import utils
 
 
 # =============================================================================
-# MAIN
+# PARAMETERS
 # =============================================================================
 
 # Companion tags.
@@ -64,20 +64,30 @@ for i in range(len(sets)):
 filts = np.unique(filts)
 filts = ['JWST/NIRCam.'+filts[i] for i in range(len(filts))]
 
-# 
+
+# =============================================================================
+# MAIN
+# =============================================================================
+
+# Initialize species.
 try:
     os.remove('species_database.hdf5')
 except:
-    print('Database already removed')
+    pass
 species.SpeciesInit()
 database = species.Database()
+
+# Add companions and model to database.
 for i in range(len(tags_spec)):
     database.add_companion(tags_spec[i])
 database.add_model(model=model,
                    wavel_range=(0.8, 5.2),
                    teff_range=teff_range)
 
+# Go through all companions.
 for i in range(len(tags_spec)):
+    
+    # Fit model to companion photometry and spectra.
     fit = species.FitModel(object_name=tags_spec[i],
                            model=model,
                            bounds={'teff': teff_range,
@@ -98,6 +108,7 @@ for i in range(len(tags_spec)):
     model_param = database.get_median_sample(tag=tags_witp[i],
                                              burnin=None)
     
+    # Plot median model and synthetic NIRCam photometry.
     readmodel = species.ReadModel(model, wavel_range=(0.8, 5.2))
     modelbox = readmodel.get_model(model_param, spec_res=100., smooth=True)
     objectbox = database.get_object(object_name=tags_spec[i])
@@ -126,6 +137,7 @@ for i in range(len(tags_spec)):
                           quantity='flux',
                           output=pmdir+'spectrum_'+tags_witp[i]+'.pdf')
     
+    # Save synthetic NIRCam photometry.
     for j in range(len(filts)):
         synphot = species.SyntheticPhotometry(filts[j])
         app_mag, abs_mag = synphot.flux_to_magnitude(synphotbox.flux[filts[j]], error=0., distance=(dist, 0.))
