@@ -40,7 +40,7 @@ if (not os.path.exists(odir)):
 # =============================================================================
 
 # Get JWST files.
-jfiles = [f for f in os.listdir(jdir) if f.endswith('nrca5_calints.fits')]
+jfiles = [f for f in os.listdir(jdir) if f.endswith('_calints.fits')]
 jfiles = sorted(jfiles)
 
 # Make ASN files.
@@ -50,9 +50,9 @@ asn_id = 'c0000'
 target = 't000'
 for i in range(len(config.obs['filter'])):
     for j in range(len(config.obs['filter'][i][0])):
-        roll1files = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and '%03.0f' % config.obs['num'][i][0]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
-        roll2files = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and '%03.0f' % config.obs['num'][i][1]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
-        reffiles = [f for f in os.listdir(jdir) if (f.endswith('nrca5_calints.fits') and '%03.0f' % config.obs['num'][i][2]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+        roll1files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][0]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+        roll2files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][1]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+        reffiles = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][2]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
         afiles += ['seq_%03.0f' % (i+1)+'_filt_'+config.obs['filter'][i][0][j]+'.asn']
         f = open(odir+afiles[-1], 'w')
         f.write('{"asn_type": "coron3",\n')

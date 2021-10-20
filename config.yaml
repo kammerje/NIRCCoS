@@ -18,12 +18,12 @@ apt:
      pointing_path: 1194.pointing # within wdir
 observation:
      date: 2022-11-05T00:00:00
-     pa1: 92.0 # deg
-     pa2: 85.0 # deg
-     wfe_drift0: 0.0 # nm
-     wfe_ref_drift: 5.0 # nm
-     wfe_roll_drift: 10.0 # nm
-     bar_offset: 8.0 # arcsec, only used by bar masks
+     pa_roll1: 92.0 # deg
+     pa_roll2: 85.0 # deg
+     pa_ref: 92.0 # deg
+     wfe_drift_roll1: 0.0 # nm
+     wfe_drift_roll2: 10.0 # nm
+     wfe_drift_ref: 5.0 # nm
      oversample: 2
      # observation numbers from APT
      # an observing sequence consists of roll 1, roll 2, ref
@@ -55,29 +55,21 @@ companions:
      c1:
           name_witp: hr8799b
           name_spec: HR 8799 b
-          ra_off:
-          de_off:
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
      c2:
           name_witp: hr8799c
           name_spec: HR 8799 c
-          ra_off:
-          de_off:
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
      c3:
           name_witp: hr8799d
           name_spec: HR 8799 d
-          ra_off:
-          de_off:
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
      c4:
           name_witp: hr8799e
           name_spec: HR 8799 e
-          ra_off:
-          de_off:
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
 pipeline:

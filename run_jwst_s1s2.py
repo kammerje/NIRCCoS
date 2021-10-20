@@ -43,7 +43,7 @@ if (not os.path.exists(odir)):
 # =============================================================================
 
 # Get MIRAGE files.
-mfiles = [f for f in os.listdir(mdir) if f.endswith('nrca5_uncal.fits')]
+mfiles = [f for f in os.listdir(mdir) if f.endswith('_uncal.fits')]
 mfiles = sorted(mfiles)
 
 # Go through all MIRAGE files.

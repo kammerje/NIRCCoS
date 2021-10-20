@@ -17,8 +17,8 @@ apt:
      xml_path: 1411.xml # within wdir
      pointing_path: 1411.pointing # within wdir
 observation:
-     date: 2022-12-15T00:00:00
-     pa_roll1: 351.0 # deg
+     date: 2022-12-14T00:00:00
+     pa_roll1: 350.0 # deg
      pa_roll2: 360.0 # deg
      pa_ref: 340.0 # deg
      wfe_drift_roll1: 0.0 # nm

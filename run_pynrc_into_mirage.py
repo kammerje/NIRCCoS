@@ -37,7 +37,7 @@ pdir = config.paths['wdir']+config.paths['pynrc_data_dir']
 # =============================================================================
 
 # Get MIRAGE and pyNRC files.
-mfiles = [f for f in os.listdir(mdir) if f.endswith('nrca5_uncal.fits')]
+mfiles = [f for f in os.listdir(mdir) if f.endswith('_uncal.fits')]
 mfiles = sorted(mfiles)
 pfiles = [f for f in os.listdir(pdir) if f.endswith('.fits')]
 pfiles = sorted(pfiles)
@@ -47,10 +47,12 @@ for i in range(len(mfiles)):
     print('Modifying '+mfiles[i])
     num = int(mfiles[i][7:10])
     ind = int(mfiles[i][20:25])
+    flag = False
     for j in range(len(config.obs['num'])):
         if (num in config.obs['num'][j]):
+            flag = True
             break
-    if (j >= len(config.obs['num'])):
+    if (flag == False):
         raise UserWarning('MIRAGE file '+mfiles[i]+' cannot be matched to an observation in the APT file')
     ww = np.where(num == np.array(config.obs['num'][j]))[0][0]
     
@@ -65,8 +67,11 @@ for i in range(len(mfiles)):
         vv = np.where(filter == np.array(config.obs['filter'][j][ww]))[0][0]
         
         # Fix incompatibility between MIRAGE v2.1.0 and JWST v1.2.3.
-        if (isinstance(hdul[0].header['NDITHPTS'], str)):
-            hdul[0].header['NRIMDTPT'] = int(hdul[0].header['NDITHPTS'])
+        try:
+            if (isinstance(hdul[0].header['NDITHPTS'], str)):
+                hdul[0].header['NRIMDTPT'] = int(hdul[0].header['NDITHPTS'])
+        except:
+            pass
         
         # Find dither pattern.
         if (config.obs['patttype'][j][ww] == 'NONE'):

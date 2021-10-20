@@ -21,6 +21,8 @@ from copy import deepcopy
 from matplotlib.patches import Circle
 from scipy.ndimage import shift
 
+import webbpsf
+
 import util
 
 
@@ -30,6 +32,12 @@ import util
 
 # Read config.
 config = util.config()
+
+# NIRCam pixel scale.
+nc_temp = webbpsf.NIRCam()
+pixscale_SW = nc_temp._pixelscale_short
+pixscale_LW = nc_temp._pixelscale_long
+del nc_temp
 
 # Append whereistheplanet, WebbPSF_ext, and pyNRC paths.
 sys.path.append(config.paths['whereistheplanet_dir'])
@@ -308,6 +316,18 @@ for i in range(nobs):
             det = obs.Detectors[0]
             im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
             
+            # Shift slope image to science reference pixel position.
+            if (config.obs['wind_mode'][i][0] == 'WINDOW'):
+                dely, delx = config.obs['crpix'][i][0][j]
+                if (config.obs['baroff'][i][0][j] is None):
+                    sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.)
+                else:
+                    if ('LONG' in config.obs['detector'][i][0]):
+                        sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_LW)
+                    else:
+                        sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_SW)
+                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
+            
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][0]+config.obs['filter'][i][0][j]+'_ramp.fits'
             hdul = slope_to_ramp(det,
@@ -350,6 +370,18 @@ for i in range(nobs):
             det = obs.Detectors[0]
             im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
             
+            # Shift slope image to science reference pixel position.
+            if (config.obs['wind_mode'][i][1] == 'WINDOW'):
+                dely, delx = config.obs['crpix'][i][1][j]
+                if (config.obs['baroff'][i][1][j] is None):
+                    sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.)
+                else:
+                    if ('LONG' in config.obs['detector'][i][1]):
+                        sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_LW)
+                    else:
+                        sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_SW)
+                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
+            
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][1]+config.obs['filter'][i][0][j]+'_ramp.fits'
             hdul = slope_to_ramp(det,
@@ -391,6 +423,18 @@ for i in range(nobs):
                                            wfe_roll_drift=config.obs['wfe'][i][1])
             det = obs.Detectors[0]
             im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
+            
+            # Shift slope image to science reference pixel position.
+            if (config.obs['wind_mode'][i][2] == 'WINDOW'):
+                dely, delx = config.obs['crpix'][i][2][j]
+                if (config.obs['baroff'][i][2][j] is None):
+                    sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.)
+                else:
+                    if ('LONG' in config.obs['detector'][i][2]):
+                        sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
+                    else:
+                        sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
+                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
             
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][2]+config.obs['filter'][i][0][j]+'_ramp.fits'
@@ -443,6 +487,18 @@ for i in range(nobs):
                                                dither=dithers[k])
                 det = obs.nrc_ref.Detectors[0]
                 im_slope = nrc_utils.sci_to_det(im_slope, det.detid)
+                
+                # Shift slope image to science reference pixel position.
+                if (config.obs['wind_mode'][i][2] == 'WINDOW'):
+                    dely, delx = config.obs['crpix'][i][2][j]
+                    if (config.obs['baroff'][i][2][j] is None):
+                        sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.)
+                    else:
+                        if ('LONG' in config.obs['detector'][i][2]):
+                            sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
+                        else:
+                            sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
+                    im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
                 
                 # Convert slope to ramp (the ramp will be saved automatically).
                 file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][2]+config.obs['filter'][i][0][j]+'_dpos_%03.0f' % k+'_ramp.fits'

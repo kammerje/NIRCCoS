@@ -349,11 +349,13 @@ class config():
         src_all = xml_file.getElementsByTagName('Target')
         for i in range(len(src_all)):
             src = src_all[i]
-            name = src.getElementsByTagName('TargetArchiveName')[0].childNodes[0].data
+            name = src.getElementsByTagName('TargetName')[0].childNodes[0].data
+            flag = False
             for j in range(len(self.src)):
                 if (name == self.src[j]['name']):
+                    flag = True
                     break
-            if (j >= len(self.src)):
+            if (flag == False):
                 raise UserWarning('Source names in config file need to match target archive names in APT file')
             self.src[j]['icrs'] = str(src.getElementsByTagName('EquatorialCoordinates')[0].getAttribute('Value'))
         
