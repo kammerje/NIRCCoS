@@ -22,24 +22,42 @@ from xml.dom import minidom
 # =============================================================================
 
 # Bar mask offsets for module A in arcsec from WebbPSF.
-offset_swb = {'F182M': -1.856,
-              'F187N': -1.571,
-              'F210M': -0.071,
-              'F212N': 0.143,
-              'F200W': 0.232,
-              'narrow': -8.00}
-offset_lwb = {'F250M': 6.846,
-              'F300M': 5.249,
-              'F277W': 5.078,
-              'F335M': 4.075,
-              'F360M': 3.195,
-              'F356W': 2.455,
-              'F410M': 1.663,
-              'F430M': 1.043,
-              'F460M': -0.098,
-              'F480M': -0.619,
-              'F444W': -0.768,
-              'narrow': 8.0}
+# offset_swb = {'F182M': -1.856,
+#               'F187N': -1.571,
+#               'F210M': -0.071,
+#               'F212N': 0.143,
+#               'F200W': 0.232,
+#               'narrow': -8.00}
+# offset_lwb = {'F250M': 6.846,
+#               'F300M': 5.249,
+#               'F277W': 5.078,
+#               'F335M': 4.075,
+#               'F360M': 3.195,
+#               'F356W': 2.455,
+#               'F410M': 1.663,
+#               'F430M': 1.043,
+#               'F460M': -0.098,
+#               'F480M': -0.619,
+#               'F444W': -0.768,
+#               'narrow': 8.0}
+offset_swb = {'F182M': -1.743,
+              'F187N': -1.544,
+              'F210M': -0.034,
+              'F212N': 0.144,
+              'F200W': 0.196,
+              'narrow': -8.053}
+offset_lwb = {'F250M': 6.565,
+              'F300M': 5.042,
+              'F277W': 4.917,
+              'F335M': 3.875,
+              'F360M': 3.057,
+              'F356W': 2.327,
+              'F410M': 1.622,
+              'F430M': 0.998,
+              'F460M': -0.094,
+              'F480M': -0.854,
+              'F444W': -0.723,
+              'narrow': 8.302}
 
 # Keyword dictionary for pyNRC.
 pupil_pynrc = {'MASK210R': 'CIRCLYOT',
@@ -85,6 +103,12 @@ subarray_stsci = {'MASK210R_SUB640': 'SUB640A210R',
                   'MASK430R_FULL': 'FULL',
                   'MASKSWB_SUB640': 'SUB640ASWB',
                   'MASKLWB_SUB320': 'SUB320ALWB'}
+noutputs_stsci = {'MASK210R_SUB640': 1,
+                  'MASK335R_SUB320': 1,
+                  'MASK430R_SUB320': 1,
+                  'MASK430R_FULL': 4,
+                  'MASKSWB_SUB640': 1,
+                  'MASKLWB_SUB320': 1}
 apername_stsci = {'MASK210R_SUB640': 'NRCA2_MASK210R',
                   'MASK335R_SUB320': 'NRCA5_MASK335R',
                   'MASK430R_SUB320': 'NRCA5_MASK430R',
@@ -107,9 +131,31 @@ apername_stsci = {'MASK210R_SUB640': 'NRCA2_MASK210R',
                   'MASKLWB_SUB320_F480M': 'NRCA5_MASKLWB_F480M',
                   'MASKLWB_SUB320_F444W': 'NRCA5_MASKLWB_F444W',
                   'MASKLWB_SUB320_NARROW': 'NRCA5_MASKLWB_NARROW'}
+# crpix_stsci = {'MASK210R_SUB640': (321.0, 336.0),
+#                'MASK335R_SUB320': (160.0, 172.5),
+#                'MASK430R_SUB320': (160.5, 172.5),
+#                'MASK430R_FULL': (973.5, 1673.5),
+#                'MASKSWB_SUB640_F182M': (263.6, 340.5),
+#                'MASKSWB_SUB640_F187N': (270.1, 340.5),
+#                'MASKSWB_SUB640_F210M': (319.4, 340.5),
+#                'MASKSWB_SUB640_F212N': (325.2, 340.5),
+#                'MASKSWB_SUB640_F200W': (326.9, 340.5),
+#                'MASKSWB_SUB640_NARROW': (57.5, 340.5),
+#                'MASKLWB_SUB320_F250M': (265.2, 175.5),
+#                'MASKLWB_SUB320_F300M': (240.8, 175.5),
+#                'MASKLWB_SUB320_F277W': (238.8, 175.5),
+#                'MASKLWB_SUB320_F335M': (222.1, 175.5),
+#                'MASKLWB_SUB320_F360M': (209.0, 175.5),
+#                'MASKLWB_SUB320_F356W': (197.3, 175.5),
+#                'MASKLWB_SUB320_F410M': (186.0, 175.5),
+#                'MASKLWB_SUB320_F430M': (176.0, 175.5),
+#                'MASKLWB_SUB320_F460M': (158.5, 175.5),
+#                'MASKLWB_SUB320_F480M': (146.3, 175.5),
+#                'MASKLWB_SUB320_F444W': (148.4, 175.5),
+#                'MASKLWB_SUB320_NARROW': (293.0, 175.5)}
 crpix_stsci = {'MASK210R_SUB640': (321.0, 336.0),
-               'MASK335R_SUB320': (160.0, 172.5),
-               'MASK430R_SUB320': (160.0, 172.5),
+               'MASK335R_SUB320': (159.0, 162.0),
+               'MASK430R_SUB320': (159.0, 162.0),
                'MASK430R_FULL': (973.5, 1673.5),
                'MASKSWB_SUB640_F182M': (263.6, 340.5),
                'MASKSWB_SUB640_F187N': (270.1, 340.5),
@@ -117,18 +163,18 @@ crpix_stsci = {'MASK210R_SUB640': (321.0, 336.0),
                'MASKSWB_SUB640_F212N': (325.2, 340.5),
                'MASKSWB_SUB640_F200W': (326.9, 340.5),
                'MASKSWB_SUB640_NARROW': (57.5, 340.5),
-               'MASKLWB_SUB320_F250M': (265.2, 175.5),
-               'MASKLWB_SUB320_F300M': (240.8, 175.5),
-               'MASKLWB_SUB320_F277W': (238.8, 175.5),
-               'MASKLWB_SUB320_F335M': (222.1, 175.5),
-               'MASKLWB_SUB320_F360M': (209.0, 175.5),
-               'MASKLWB_SUB320_F356W': (197.3, 175.5),
-               'MASKLWB_SUB320_F410M': (186.0, 175.5),
-               'MASKLWB_SUB320_F430M': (176.0, 175.5),
-               'MASKLWB_SUB320_F460M': (158.5, 175.5),
-               'MASKLWB_SUB320_F480M': (146.3, 175.5),
-               'MASKLWB_SUB320_F444W': (148.4, 175.5),
-               'MASKLWB_SUB320_NARROW': (293.0, 175.5)}
+               'MASKLWB_SUB320_F250M': (161.0, 161.0),
+               'MASKLWB_SUB320_F300M': (161.0, 161.0),
+               'MASKLWB_SUB320_F277W': (161.0, 161.0),
+               'MASKLWB_SUB320_F335M': (161.0, 161.0),
+               'MASKLWB_SUB320_F360M': (161.0, 161.0),
+               'MASKLWB_SUB320_F356W': (161.0, 161.0),
+               'MASKLWB_SUB320_F410M': (161.0, 161.0),
+               'MASKLWB_SUB320_F430M': (161.0, 161.0),
+               'MASKLWB_SUB320_F460M': (161.0, 161.0),
+               'MASKLWB_SUB320_F480M': (161.0, 161.0),
+               'MASKLWB_SUB320_F444W': (161.0, 161.0),
+               'MASKLWB_SUB320_NARROW': (161.0, 161.0)}
 
 class config():
     
@@ -334,7 +380,7 @@ class config():
                 try:
                     sreq += [obs.getElementsByTagName('FiducialPointOverride')[0].childNodes[0].data]
                 except:
-                    sreq += [None]
+                    sreq += ['']
             self.obs['num'] += [num]
             self.obs['mask'] += [mask]
             self.obs['conf'] += [conf]
@@ -347,17 +393,17 @@ class config():
             self.obs['sreq'] += [sreq]
         
         src_all = xml_file.getElementsByTagName('Target')
-        for i in range(len(src_all)):
-            src = src_all[i]
-            name = src.getElementsByTagName('TargetName')[0].childNodes[0].data
+        for i in range(len(self.src)):
             flag = False
-            for j in range(len(self.src)):
-                if (name == self.src[j]['name']):
+            for j in range(len(src_all)):
+                src = src_all[j]
+                name = src.getElementsByTagName('TargetName')[0].childNodes[0].data
+                if (name == self.src[i]['name']):
                     flag = True
                     break
             if (flag == False):
                 raise UserWarning('Source names in config file need to match target archive names in APT file')
-            self.src[j]['icrs'] = str(src.getElementsByTagName('EquatorialCoordinates')[0].getAttribute('Value'))
+            self.src[i]['icrs'] = str(src.getElementsByTagName('EquatorialCoordinates')[0].getAttribute('Value'))
         
         return None
     
@@ -387,6 +433,7 @@ class config():
         self.obs['pupil'] = []
         self.obs['coronmsk'] = []
         self.obs['subarray'] = []
+        self.obs['noutputs'] = []
         self.obs['apername'] = []
         self.obs['crpix'] = []
         for i in range(len(self.obs['filter'])):
@@ -395,6 +442,7 @@ class config():
             pupil = []
             coronmsk = []
             subarray = []
+            noutputs = []
             apername = []
             crpix = []
             for j in range(len(self.obs['filter'][i])):
@@ -404,6 +452,7 @@ class config():
                 pupil += [pupil_stsci[tag]]
                 coronmsk += [coronmsk_stsci[tag]]
                 subarray += [subarray_stsci[tag]]
+                noutputs += [noutputs_stsci[tag]]
                 apername_temp = []
                 crpix_temp = []
                 for k in range(len(self.obs['filter'][i][j])):    
@@ -421,6 +470,7 @@ class config():
             self.obs['pupil'] += [pupil]
             self.obs['coronmsk'] += [coronmsk]
             self.obs['subarray'] += [subarray]
+            self.obs['noutputs'] += [noutputs]
             self.obs['apername'] += [apername]
             self.obs['crpix'] += [crpix]
         

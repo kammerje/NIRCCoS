@@ -17,6 +17,8 @@ import os
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 
+from mirage.utils.siaf_interface import sci_subarray_corners
+
 import util
 
 
@@ -123,6 +125,7 @@ for i in range(len(mfiles)):
         hdul[0].header['PUPIL'] = config.obs['pupil'][j][ww]
         hdul[0].header['EXP_TYPE'] = 'NRC_CORON'
         hdul[0].header['SUBARRAY'] = config.obs['subarray'][j][ww]
+        hdul[0].header['NOUTPUTS'] = config.obs['noutputs'][j][ww]
         hdul[0].header['CORONMSK'] = config.obs['coronmsk'][j][ww]
         hdul[0].header['APERNAME'] = config.obs['apername'][j][ww][vv]
         hdul['SCI'].header['CRPIX1'] = config.obs['crpix'][j][ww][vv][0]
@@ -133,6 +136,20 @@ for i in range(len(mfiles)):
         hdul['SCI'].header['YREF_SCI'] = config.obs['crpix'][j][ww][vv][1]
         hdul['SCI'].header['RA_REF'] = coord.ra.deg
         hdul['SCI'].header['DEC_REF'] = coord.dec.deg
+        
+        # Correct mapping to CRDS files, probably a pyNRC error.
+        if (hdul[0].header['SUBARRAY'] == 'SUB320A430R'):
+            x, y = sci_subarray_corners('nircam', 'NRCA5_MASK430R')
+            substrt1, substrt2 = x[0]+1, y[0]+1
+            hdul[0].header['SUBSTRT1'] = substrt1+1
+            hdul[0].header['SUBSTRT2'] = substrt2+11
+        elif (hdul[0].header['SUBARRAY'] == 'SUB320ALWB'):
+            x, y = sci_subarray_corners('nircam', 'NRCA5_MASKLWB')
+            substrt1, substrt2 = x[0]+1, y[0]+1
+            hdul[0].header['SUBSTRT1'] = substrt1-1
+            hdul[0].header['SUBSTRT2'] = substrt2+15
+        else:
+            raise UserWarning('Mapping correction unknown')
         
         hdul.writeto(mdir+mfiles[i], overwrite=True)
         hdul.close()

@@ -22,8 +22,8 @@ observation:
      pa_roll2: 281.0 # deg
      pa_ref: 294.0 # deg
      wfe_drift_roll1: 0.0 # nm
-     wfe_drift_roll2: 10.0 # nm
-     wfe_drift_ref: 5.0 # nm
+     wfe_drift_roll2: 2.0 # nm
+     wfe_drift_ref: 1.0 # nm
      oversample: 2
      # observation numbers from APT
      # an observing sequence consists of roll 1, roll 2, ref
@@ -57,6 +57,8 @@ companions:
           name_spec: 51 Eri b
           mass: 2.6 # M_Jupiter
           sent: 10.0 # kB/baryon
+          ra_off: 297 # mas
+          de_off: 23 # mas
 pipeline:
      model_spec: atmo
      teff_range: 500.0,1500.0

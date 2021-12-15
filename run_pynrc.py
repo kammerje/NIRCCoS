@@ -91,7 +91,7 @@ for i in range(len(config.cmp)):
     else:
         locs += [(config.cmp[i]['ra_off']/1e3, config.cmp[i]['de_off']/1e3)]
         print('Companion '+tags[-1]+' found in config file')
-        print('RA = %.3f mas, DEC = %.3f mas' % (locs[-1][0], locs[-1][1]))
+        print('RA = %.3f arcsec, DEC = %.3f arcsec' % (locs[-1][0], locs[-1][1]))
 
 # Companion magnitudes.
 pmdir = config.paths['wdir']+config.paths['pmdir']
@@ -224,7 +224,7 @@ for i in range(nobs):
             ax.tick_params(axis='both', color='white', which='both')
             for k in ax.spines.keys():
                 ax.spines[k].set_color('white')
-            nrc_utils.plotAxes(ax, width=1., headwidth=5., alength=0.15, angle=config.obs['pa'][i][0], position=(0.7, 0.7), label1='E', label2='N', dir1=[1, 0], dir2=[0, -1])
+            nrc_utils.plotAxes(ax, width=1., headwidth=5., alength=0.15, angle=config.obs['pa'][i][0], position=(0.75, 0.75), label1='E', label2='N', dir1=[-1, 0], dir2=[0, 1])
             plt.tight_layout()
             plt.savefig(fdir+'seq_%03.0f_filt_' % i+config.obs['filter'][i][0][j]+'_planets.pdf')
             plt.close()
@@ -260,7 +260,7 @@ for i in range(nobs):
                 ax[k].tick_params(axis='both', color='white', which='both')
                 for l in ax[k].spines.keys():
                     ax[k].spines[l].set_color('white')
-                nrc_utils.plotAxes(ax[k], width=1., headwidth=5., alength=0.15, position=(0.9, 0.7), label1='E', label2='N')
+                nrc_utils.plotAxes(ax[k], width=1., headwidth=5., alength=0.15, position=(0.95, 0.75), label1='E', label2='N')
             plt.suptitle('{} planets - {} {}'.format(name_sci, obs.filter, obs.mask))
             plt.tight_layout()
             plt.subplots_adjust(top=0.85)
@@ -320,13 +320,16 @@ for i in range(nobs):
             if (config.obs['wind_mode'][i][0] == 'WINDOW'):
                 dely, delx = config.obs['crpix'][i][0][j]
                 if (config.obs['baroff'][i][0][j] is None):
-                    sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.)
+                    # sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.)
+                    sh = (delx-config.obs['fov_pix'][i][0]/2., dely-0.5-config.obs['fov_pix'][i][0]/2.)
                 else:
                     if ('LONG' in config.obs['detector'][i][0]):
-                        sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_LW)
+                        # sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_LW)
+                        sh = (delx-config.obs['fov_pix'][i][0]/2., dely-0.5-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_LW)
                     else:
-                        sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_SW)
-                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
+                        # sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_SW)
+                        sh = (delx-config.obs['fov_pix'][i][0]/2., dely-0.5-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_SW)
+                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
             
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][0]+config.obs['filter'][i][0][j]+'_ramp.fits'
@@ -374,13 +377,16 @@ for i in range(nobs):
             if (config.obs['wind_mode'][i][1] == 'WINDOW'):
                 dely, delx = config.obs['crpix'][i][1][j]
                 if (config.obs['baroff'][i][1][j] is None):
-                    sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.)
+                    # sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.)
+                    sh = (delx-config.obs['fov_pix'][i][1]/2., dely-0.5-config.obs['fov_pix'][i][1]/2.)
                 else:
                     if ('LONG' in config.obs['detector'][i][1]):
-                        sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_LW)
+                        # sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_LW)
+                        sh = (delx-config.obs['fov_pix'][i][1]/2., dely-0.5-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_LW)
                     else:
-                        sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_SW)
-                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
+                        # sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_SW)
+                        sh = (delx-config.obs['fov_pix'][i][1]/2., dely-0.5-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_SW)
+                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
             
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][1]+config.obs['filter'][i][0][j]+'_ramp.fits'
@@ -428,13 +434,16 @@ for i in range(nobs):
             if (config.obs['wind_mode'][i][2] == 'WINDOW'):
                 dely, delx = config.obs['crpix'][i][2][j]
                 if (config.obs['baroff'][i][2][j] is None):
-                    sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.)
+                    # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.)
+                    sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.)
                 else:
                     if ('LONG' in config.obs['detector'][i][2]):
-                        sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
+                        # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
+                        sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
                     else:
-                        sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
-                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
+                        # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
+                        sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
+                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
             
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][2]+config.obs['filter'][i][0][j]+'_ramp.fits'
@@ -492,13 +501,16 @@ for i in range(nobs):
                 if (config.obs['wind_mode'][i][2] == 'WINDOW'):
                     dely, delx = config.obs['crpix'][i][2][j]
                     if (config.obs['baroff'][i][2][j] is None):
-                        sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.)
+                        # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.)
+                        sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.)
                     else:
                         if ('LONG' in config.obs['detector'][i][2]):
-                            sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
+                            # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
+                            sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_LW)
                         else:
-                            sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
-                    im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='nearest'))
+                            # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
+                            sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
+                    im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
                 
                 # Convert slope to ramp (the ramp will be saved automatically).
                 file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][2]+config.obs['filter'][i][0][j]+'_dpos_%03.0f' % k+'_ramp.fits'

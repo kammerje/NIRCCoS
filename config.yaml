@@ -22,8 +22,8 @@ observation:
      pa_roll2: 85.0 # deg
      pa_ref: 92.0 # deg
      wfe_drift_roll1: 0.0 # nm
-     wfe_drift_roll2: 10.0 # nm
-     wfe_drift_ref: 5.0 # nm
+     wfe_drift_roll2: 2.0 # nm
+     wfe_drift_ref: 1.0 # nm
      oversample: 2
      # observation numbers from APT
      # an observing sequence consists of roll 1, roll 2, ref
@@ -57,21 +57,29 @@ companions:
           name_spec: HR 8799 b
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
+          ra_off: 1625 # mas
+          de_off: 563 # mas
      c2:
           name_witp: hr8799c
           name_spec: HR 8799 c
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
+          ra_off: -319 # mas
+          de_off: 886 # mas
      c3:
           name_witp: hr8799d
           name_spec: HR 8799 d
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
+          ra_off: -589 # mas
+          de_off: -385 # mas
      c4:
           name_witp: hr8799e
           name_spec: HR 8799 e
           mass: 10.0 # M_Jupiter
           sent: 13.0 # kB/baryon
+          ra_off: -248 # mas
+          de_off: 294 # mas
 pipeline:
      model_spec: exo-rem
      teff_range: 1000.0,2000.0

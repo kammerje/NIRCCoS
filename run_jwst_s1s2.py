@@ -18,9 +18,6 @@ os.environ['CRDS_SERVER_URL'] = 'https://jwst-crds.stsci.edu'
 
 import util
 
-from astropy import units as u
-from astropy.coordinates import SkyCoord
-
 from jwst.pipeline import Detector1Pipeline, Image2Pipeline
 
 
@@ -133,7 +130,7 @@ for i in range(len(mfiles)):
         # - ERR remains unchanged.
         # - PIXELDQ remains unchanged.
         # - GROUPDQ remains unchanged.
-        result1.dark_current.skip = True
+        result1.dark_current.skip = False
         result1.dark_current.save_results = False
         result1.dark_current.dark_output = None
         
@@ -141,12 +138,16 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result1.jump.skip = False
         result1.jump.save_results = False
-        # result1.jump.rejection_threshold = 4.
-        result1.jump.rejection_threshold = 200.
+        result1.jump.rejection_threshold = 4.
+        result1.jump.three_group_rejection_threshold = 6.
+        result1.jump.four_group_rejection_threshold = 5.
+        # result1.jump.rejection_threshold = 50.
+        # result1.jump.three_group_rejection_threshold = 50.
+        # result1.jump.four_group_rejection_threshold = 50.
         result1.jump.maximum_cores = 'none'
         result1.jump.flag_4_neighbors = True
-        # result1.jump.max_jump_to_flag_neighbors = 200.
-        # result1.jump.min_jump_to_flag_neighbors = 10.
+        result1.jump.max_jump_to_flag_neighbors = 1000.
+        result1.jump.min_jump_to_flag_neighbors = 10.
         
         # 9 Slope fitting.
         # - SCI gets collapsed along ngroup axis.
@@ -169,6 +170,26 @@ for i in range(len(mfiles)):
         # Run Detector1Pipeline.
         result1.output_dir = odir
         result1.run(mdir+mfiles[i])
+        
+        # print('Bad pixels DQ init: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'dq_init'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'dq_init'), 'GROUPDQ') != 0)))
+        # print('Bad pixels saturation: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'saturation'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'saturation'), 'GROUPDQ') != 0)))
+        # print('Bad pixels superbias: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'superbias'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'superbias'), 'GROUPDQ') != 0)))
+        # print('Bad pixels refpix: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'refpix'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'refpix'), 'GROUPDQ') != 0)))
+        # print('Bad pixels linearity: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'linearity'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'linearity'), 'GROUPDQ') != 0)))
+        # print('Bad pixels persistence: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'persistence'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'persistence'), 'GROUPDQ') != 0)))
+        # print('Bad pixels dark current: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'dark_current'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'dark_current'), 'GROUPDQ') != 0)))
+        # print('Bad pixels jump: %.0f, %.0f' % (np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'jump'), 'PIXELDQ') != 0), np.sum(pyfits.getdata(odir+mfiles[i].replace('uncal', 'jump'), 'GROUPDQ') != 0)))
+        
+        # hdul = pyfits.open(odir+mfiles[i].replace('uncal', 'jump'))
+        # f, ax = plt.subplots(1, 2, figsize=(2*6.4, 1*4.8))
+        # ww = 0
+        # p0 = ax[0].imshow(hdul['SCI'].data[ww, 0], origin='lower', vmax=1e5)
+        # plt.colorbar(p0, ax=ax[0])
+        # p1 = ax[1].imshow((np.sum(hdul['GROUPDQ'].data[ww].astype(float), axis=0)+hdul['PIXELDQ'].data.astype(float)) > 0.5, origin='lower')
+        # plt.colorbar(p1, ax=ax[1])
+        # plt.show()
+        
+        # import pdb; pdb.set_trace()
         
         # Initialize Image2Pipeline.
         result2 = Image2Pipeline()

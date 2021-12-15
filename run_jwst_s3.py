@@ -116,9 +116,9 @@ for i in range(len(afiles)):
     # 3 Align reference PSFs.
     result3.align_refs.skip = False
     result3.align_refs.save_results = False
-    result3.align_refs.median_box_length = 3
-    # result3.align_refs.bad_bits = '0'
-    result3.align_refs.bad_bits = 'HOT, UNRELIABLE_BIAS'
+    result3.align_refs.median_box_length = 5
+    result3.align_refs.bad_bits = 'DO_NOT_USE'
+    # result3.align_refs.bad_bits = 'JUMP_DET, HOT, NO_LIN_CORR, UNRELIABLE_BIAS'
     
     # 4 Reference PSF subtraction.
     result3.klip.skip = False
