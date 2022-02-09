@@ -22,6 +22,7 @@ from xml.dom import minidom
 # =============================================================================
 
 # Bar mask offsets for module A in arcsec from WebbPSF.
+# Outdated values are following:
 # offset_swb = {'F182M': -1.856,
 #               'F187N': -1.571,
 #               'F210M': -0.071,
@@ -40,6 +41,7 @@ from xml.dom import minidom
 #               'F480M': -0.619,
 #               'F444W': -0.768,
 #               'narrow': 8.0}
+# Updated values are following:
 offset_swb = {'F182M': -1.743,
               'F187N': -1.544,
               'F210M': -0.034,
@@ -131,6 +133,9 @@ apername_stsci = {'MASK210R_SUB640': 'NRCA2_MASK210R',
                   'MASKLWB_SUB320_F480M': 'NRCA5_MASKLWB_F480M',
                   'MASKLWB_SUB320_F444W': 'NRCA5_MASKLWB_F444W',
                   'MASKLWB_SUB320_NARROW': 'NRCA5_MASKLWB_NARROW'}
+# TODO: the following values are consistent with the NIRCam SIAF, but do not
+#       work correctly with the JWST stage 3 pipeline. However, this is how
+#       the real data should look like.
 # crpix_stsci = {'MASK210R_SUB640': (321.0, 336.0),
 #                'MASK335R_SUB320': (160.0, 172.5),
 #                'MASK430R_SUB320': (160.5, 172.5),
@@ -153,6 +158,9 @@ apername_stsci = {'MASK210R_SUB640': 'NRCA2_MASK210R',
 #                'MASKLWB_SUB320_F480M': (146.3, 175.5),
 #                'MASKLWB_SUB320_F444W': (148.4, 175.5),
 #                'MASKLWB_SUB320_NARROW': (293.0, 175.5)}
+# TODO: the following values are the tweaked CRPIX positions and work
+#       correctly with the JWST stage 3 pipeline if the correct distortion
+#       reference files are activated in run_jwst_s1s2.py.
 crpix_stsci = {'MASK210R_SUB640': (321.0, 336.0),
                'MASK335R_SUB320': (159.0, 162.0),
                'MASK430R_SUB320': (159.0, 162.0),

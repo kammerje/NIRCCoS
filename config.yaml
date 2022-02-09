@@ -22,8 +22,8 @@ observation:
      pa_roll2: 85.0 # deg
      pa_ref: 92.0 # deg
      wfe_drift_roll1: 0.0 # nm
-     wfe_drift_roll2: 2.0 # nm
-     wfe_drift_ref: 1.0 # nm
+     wfe_drift_roll2: 0.0 # nm
+     wfe_drift_ref: 0.0 # nm
      oversample: 2
      # observation numbers from APT
      # an observing sequence consists of roll 1, roll 2, ref
