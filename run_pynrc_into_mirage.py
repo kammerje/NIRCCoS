@@ -138,7 +138,12 @@ for i in range(len(mfiles)):
         hdul['SCI'].header['DEC_REF'] = coord.dec.deg
         
         # Correct mapping to CRDS files, probably a pyNRC error.
-        if (hdul[0].header['SUBARRAY'] == 'SUB320A430R'):
+        if (hdul[0].header['SUBARRAY'] == 'SUB320A335R'):
+            x, y = sci_subarray_corners('nircam', 'NRCA5_MASK335R')
+            substrt1, substrt2 = x[0]+1, y[0]+1
+            hdul[0].header['SUBSTRT1'] = substrt1
+            hdul[0].header['SUBSTRT2'] = substrt2+11
+        elif (hdul[0].header['SUBARRAY'] == 'SUB320A430R'):
             x, y = sci_subarray_corners('nircam', 'NRCA5_MASK430R')
             substrt1, substrt2 = x[0]+1, y[0]+1
             hdul[0].header['SUBSTRT1'] = substrt1+1

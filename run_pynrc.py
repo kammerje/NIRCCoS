@@ -121,6 +121,14 @@ sp_sci = pynrc.stellar_spectrum(sptype_sci, kmag_sci, 'vegamag', bp_sci, Teff=te
 sp_sci.name = name_sci
 sp_ref = pynrc.stellar_spectrum(sptype_ref, kmag_ref, 'vegamag', bp_ref, Teff=teff_ref, metallicity=feh_ref, log_g=logg_ref)
 sp_ref.name = name_ref
+# sp_sci.convert('Jy')
+# sp_ref.convert('Jy')
+# np.save(pmdir+'sci_wave.npy', sp_sci.wave/1e4) # microns
+# np.save(pmdir+'sci_flux.npy', sp_sci.flux/1e4) # Jy
+# np.save(pmdir+'ref_wave.npy', sp_ref.wave/1e4) # microns
+# np.save(pmdir+'ref_flux.npy', sp_ref.flux/1e4) # Jy
+# sp_sci.convert('flam')
+# sp_ref.convert('flam')
 
 # Plot source spectra.
 if (make_plots == True):
@@ -193,7 +201,12 @@ for i in range(nobs):
         if (make_plots == True):
             
             # Generate image.
-            im_planets = obs.gen_planets_image(PA_offset=config.obs['pa'][i][0])
+            im_planets, cons, psfs = obs.gen_planets_image(PA_offset=config.obs['pa'][i][0], return_cons_and_psfs=True)
+            np.save(fdir+'seq_%03.0f_filt_' % i+config.obs['filter'][i][0][j]+'_cons.npy', cons)
+            np.save(fdir+'seq_%03.0f_filt_' % i+config.obs['filter'][i][0][j]+'_psfs_%+04.0fdeg.npy' % config.obs['pa'][i][0], psfs)
+            _, _, psfs = obs.gen_planets_image(PA_offset=config.obs['pa'][i][1], return_cons_and_psfs=True)
+            np.save(fdir+'seq_%03.0f_filt_' % i+config.obs['filter'][i][0][j]+'_psfs_%+04.0fdeg.npy' % config.obs['pa'][i][1], psfs)
+            np.save(fdir+'seq_%03.0f_filt_' % i+config.obs['filter'][i][0][j]+'_starmag.npy', np.array(obs.star_flux(fluxunit='vegamag')))
             
             # Plot image.
             f, ax = plt.subplots(1, 1, figsize=(6.4, 6.4))
@@ -297,6 +310,7 @@ for i in range(nobs):
         
         # Activate wavefront drifts.
         obs.wfe_drift = True
+        obs.nrc_ref.wfe_drift = True
         
         # Roll 1.
         if (config.obs['patttype'][i][0] == 'NONE'):
@@ -329,7 +343,7 @@ for i in range(nobs):
                     else:
                         # sh = (delx-1.-config.obs['fov_pix'][i][0]/2., dely-1.-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_SW)
                         sh = (delx-config.obs['fov_pix'][i][0]/2., dely-0.5-config.obs['fov_pix'][i][0]/2.+config.obs['baroff'][i][0][j]/pixscale_SW)
-                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
+                im_slope = shift(im_slope, sh, order=1, mode='constant', cval=0.)
             
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][0]+config.obs['filter'][i][0][j]+'_ramp.fits'
@@ -386,7 +400,7 @@ for i in range(nobs):
                     else:
                         # sh = (delx-1.-config.obs['fov_pix'][i][1]/2., dely-1.-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_SW)
                         sh = (delx-config.obs['fov_pix'][i][1]/2., dely-0.5-config.obs['fov_pix'][i][1]/2.+config.obs['baroff'][i][1][j]/pixscale_SW)
-                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
+                im_slope = shift(im_slope, sh, order=1, mode='constant', cval=0.)
             
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][1]+config.obs['filter'][i][0][j]+'_ramp.fits'
@@ -443,7 +457,7 @@ for i in range(nobs):
                     else:
                         # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
                         sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
-                im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
+                im_slope = shift(im_slope, sh, order=1, mode='constant', cval=0.)
             
             # Convert slope to ramp (the ramp will be saved automatically).
             file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][2]+config.obs['filter'][i][0][j]+'_ramp.fits'
@@ -510,7 +524,7 @@ for i in range(nobs):
                         else:
                             # sh = (delx-1.-config.obs['fov_pix'][i][2]/2., dely-1.-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
                             sh = (delx-config.obs['fov_pix'][i][2]/2., dely-0.5-config.obs['fov_pix'][i][2]/2.+config.obs['baroff'][i][2][j]/pixscale_SW)
-                    im_slope = np.exp(shift(np.log(im_slope), sh, order=3, mode='constant', cval=-100))
+                    im_slope = shift(im_slope, sh, order=1, mode='constant', cval=0.)
                 
                 # Convert slope to ramp (the ramp will be saved automatically).
                 file_out = odir+'obs_%03.0f_filt_' % config.obs['num'][i][2]+config.obs['filter'][i][0][j]+'_dpos_%03.0f' % k+'_ramp.fits'

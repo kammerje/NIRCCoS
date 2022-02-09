@@ -15,6 +15,7 @@ import numpy as np
 import os
 os.environ['CRDS_PATH'] = 'crds_cache'
 os.environ['CRDS_SERVER_URL'] = 'https://jwst-crds.stsci.edu'
+import urllib
 
 import util
 
@@ -138,12 +139,12 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result1.jump.skip = False
         result1.jump.save_results = False
-        result1.jump.rejection_threshold = 4.
-        result1.jump.three_group_rejection_threshold = 6.
-        result1.jump.four_group_rejection_threshold = 5.
-        # result1.jump.rejection_threshold = 50.
-        # result1.jump.three_group_rejection_threshold = 50.
-        # result1.jump.four_group_rejection_threshold = 50.
+        # result1.jump.rejection_threshold = 4.
+        # result1.jump.three_group_rejection_threshold = 6.
+        # result1.jump.four_group_rejection_threshold = 5.
+        result1.jump.rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
+        result1.jump.three_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
+        result1.jump.four_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
         result1.jump.maximum_cores = 'none'
         result1.jump.flag_4_neighbors = True
         result1.jump.max_jump_to_flag_neighbors = 1000.
@@ -198,6 +199,27 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result2.assign_wcs.skip = False
         result2.assign_wcs.save_results = False
+        
+        # TODO: uncomment the following lines if you are using the tweaked
+        #       CRPIX positions in util.py and want to run the JWST stage 3
+        #       pipeline successfully. This will make sure that the correctly
+        #       working distortion reference files will be used.
+        if (config.obs['pupil'][j][ww] == 'MASKRND'):
+            fdir = 'crds_cache/references/jwst/nircam/'
+            file = 'jwst_nircam_distortion_0110.asdf'
+            result2.assign_wcs.override_distortion = fdir+file
+            if (not os.path.exists(fdir+file)):
+                if (not os.path.exists(fdir)):
+                    os.makedirs(fdir)
+                urllib.request.urlretrieve('https://jwst-crds.stsci.edu/unchecked_get/references/jwst/'+file, fdir+file)
+        elif (config.obs['pupil'][j][ww] == 'MASKBAR'):
+            fdir = 'crds_cache/references/jwst/nircam/'
+            file = 'jwst_nircam_distortion_0109.asdf'
+            result2.assign_wcs.override_distortion = fdir+file
+            if (not os.path.exists(fdir+file)):
+                if (not os.path.exists(fdir)):
+                    os.makedirs(fdir)
+                urllib.request.urlretrieve('https://jwst-crds.stsci.edu/unchecked_get/references/jwst/'+file, fdir+file)
         
         # 2 Background subtraction.
         # - DOES NOTHING.
