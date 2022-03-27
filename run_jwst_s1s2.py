@@ -29,7 +29,8 @@ from jwst.pipeline import Detector1Pipeline, Image2Pipeline
 # Read config.
 config = util.config()
 
-# MIRAGE and JWST data directories.
+# pyNRC, MIRAGE, and JWST data directories.
+pdir = config.paths['wdir']+config.paths['pynrc_data_dir']
 mdir = config.paths['wdir']+config.paths['mirage_data_dir']
 odir = config.paths['wdir']+config.paths['jwst_s1s2_data_dir']
 if (not os.path.exists(odir)):
@@ -41,26 +42,47 @@ if (not os.path.exists(odir)):
 # =============================================================================
 
 # Get MIRAGE files.
-mfiles = [f for f in os.listdir(mdir) if f.endswith('_uncal.fits')]
-mfiles = sorted(mfiles)
+if (os.path.exists(mdir)):
+    mfiles = [f for f in os.listdir(mdir) if f.endswith('_uncal.fits')]
+    mfiles = sorted(mfiles)
+    mirage = True
+
+# Get pyNRC files.
+elif (os.path.exists(pdir)):
+    mfiles = [f for f in os.listdir(pdir) if f.startswith('pynrc_') and f.endswith('_uncal.fits')]
+    mfiles = sorted(mfiles)
+    mirage = False
+    mdir = pdir
+
+else:
+    raise UserWarning('No simulated data found')
 
 # Go through all MIRAGE files.
 for i in range(len(mfiles)):
     print('Reducing '+mfiles[i])
-    num = int(mfiles[i][7:10])
-    ind = int(mfiles[i][20:25])
-    for j in range(len(config.obs['num'])):
-        if (num in config.obs['num'][j]):
-            break
-    if (j >= len(config.obs['num'])):
-        raise UserWarning('MIRAGE file '+mfiles[i]+' cannot be matched to an observation in the APT file')
-    ww = np.where(num == np.array(config.obs['num'][j]))[0][0]
     
-    # Skip Target Acquisition and Astrometric Confirmation images.
-    if (config.obs['conf'][j][ww] == False):
-        skip = [1]
+    # Data is from MIRAGE and old pyNRC.
+    if (mirage == True):
+        num = int(mfiles[i][7:10])
+        ind = int(mfiles[i][20:25])
+        for j in range(len(config.obs['num'])):
+            if (num in config.obs['num'][j]):
+                break
+        if (j >= len(config.obs['num'])):
+            raise UserWarning('MIRAGE file '+mfiles[i]+' cannot be matched to an observation in the APT file')
+        ww = np.where(num == np.array(config.obs['num'][j]))[0][0]
+        
+        # Skip Target Acquisition and Astrometric Confirmation images.
+        if (config.obs['conf'][j][ww] == False):
+            skip = [1]
+        else:
+            skip = [1, 2, 3]
+    
+    # Data is from new pyNRC.
     else:
-        skip = [1, 2, 3]
+        ind = 0
+        skip = []
+    
     if (ind not in skip):
         print('   Running through JWST data reduction pipeline')
         
@@ -139,12 +161,12 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result1.jump.skip = False
         result1.jump.save_results = False
-        # result1.jump.rejection_threshold = 4.
-        # result1.jump.three_group_rejection_threshold = 6.
-        # result1.jump.four_group_rejection_threshold = 5.
-        result1.jump.rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
-        result1.jump.three_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
-        result1.jump.four_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
+        result1.jump.rejection_threshold = 4.
+        result1.jump.three_group_rejection_threshold = 6.
+        result1.jump.four_group_rejection_threshold = 5.
+        # result1.jump.rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
+        # result1.jump.three_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
+        # result1.jump.four_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
         result1.jump.maximum_cores = 'none'
         result1.jump.flag_4_neighbors = True
         result1.jump.max_jump_to_flag_neighbors = 1000.
@@ -204,22 +226,22 @@ for i in range(len(mfiles)):
         #       CRPIX positions in util.py and want to run the JWST stage 3
         #       pipeline successfully. This will make sure that the correctly
         #       working distortion reference files will be used.
-        if (config.obs['pupil'][j][ww] == 'MASKRND'):
-            fdir = 'crds_cache/references/jwst/nircam/'
-            file = 'jwst_nircam_distortion_0110.asdf'
-            result2.assign_wcs.override_distortion = fdir+file
-            if (not os.path.exists(fdir+file)):
-                if (not os.path.exists(fdir)):
-                    os.makedirs(fdir)
-                urllib.request.urlretrieve('https://jwst-crds.stsci.edu/unchecked_get/references/jwst/'+file, fdir+file)
-        elif (config.obs['pupil'][j][ww] == 'MASKBAR'):
-            fdir = 'crds_cache/references/jwst/nircam/'
-            file = 'jwst_nircam_distortion_0109.asdf'
-            result2.assign_wcs.override_distortion = fdir+file
-            if (not os.path.exists(fdir+file)):
-                if (not os.path.exists(fdir)):
-                    os.makedirs(fdir)
-                urllib.request.urlretrieve('https://jwst-crds.stsci.edu/unchecked_get/references/jwst/'+file, fdir+file)
+        # if (config.obs['pupil'][j][ww] == 'MASKRND'):
+        #     fdir = 'crds_cache/references/jwst/nircam/'
+        #     file = 'jwst_nircam_distortion_0110.asdf'
+        #     result2.assign_wcs.override_distortion = fdir+file
+        #     if (not os.path.exists(fdir+file)):
+        #         if (not os.path.exists(fdir)):
+        #             os.makedirs(fdir)
+        #         urllib.request.urlretrieve('https://jwst-crds.stsci.edu/unchecked_get/references/jwst/'+file, fdir+file)
+        # elif (config.obs['pupil'][j][ww] == 'MASKBAR'):
+        #     fdir = 'crds_cache/references/jwst/nircam/'
+        #     file = 'jwst_nircam_distortion_0109.asdf'
+        #     result2.assign_wcs.override_distortion = fdir+file
+        #     if (not os.path.exists(fdir+file)):
+        #         if (not os.path.exists(fdir)):
+        #             os.makedirs(fdir)
+        #         urllib.request.urlretrieve('https://jwst-crds.stsci.edu/unchecked_get/references/jwst/'+file, fdir+file)
         
         # 2 Background subtraction.
         # - DOES NOTHING.

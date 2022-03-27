@@ -1,0 +1,67 @@
+paths:
+     wdir: HIP65426_new/ # working directory
+     pmdir: pmags/ # planet magnitudes directory (sub-directory of wdir)
+     pynrc_data_dir: pynrc_data/ # directory for pyNRC data (sub-directory of wdir)
+     pynrc_figs_dir: pynrc_figs/ # directory for pyNRC figures (sub-directory of wdir)
+     mirage_refs_dir: mirage_refs/ # directory for MIRAGE reference files
+     mirage_cats_dir: mirage_cats/ # directory for MIRAGE catalogs (sub-directory of wdir)
+     mirage_logs_dir: mirage_logs/ # directory for MIRAGE logs (sub-directory of wdir)
+     mirage_data_dir: mirage_data/ # directory for MIRAGE data (sub-directory of wdir)
+     jwst_s1s2_data_dir: jwst_s1s2_data/ # directory for JWST data (sub-directory of wdir)
+     jwst_s3_data_dir: jwst_s3_data/ # directory for JWST data (sub-directory of wdir)
+     species_dir: /Users/jkammerer/Documents/Code/species
+     whereistheplanet_dir: /Users/jkammerer/Documents/Code/whereistheplanet
+     webbpsf_ext_dir: /Users/jkammerer/Documents/Code/webbpsf_ext
+     pynrc_dir: /Users/jkammerer/Documents/Code/pynrc
+apt:
+     xml_path: 1386.xml # within wdir
+     pointing_path: 1386.pointing # within wdir
+observation:
+     date: 2022-07-12T00:00:00
+     pa_roll1: 100.0 # deg
+     pa_roll2: 110.0 # deg
+     pa_ref: 100.0 # deg
+     wfe_drift_roll1: 1.0 # nm
+     wfe_drift_roll2: 2.0 # nm
+     wfe_drift_ref: 0.0 # nm
+     oversample: 2
+     # observation numbers from APT
+     # an observing sequence consists of roll 1, roll 2, ref
+     sequences:
+          s1: 2,3,1
+sources:
+     sci:
+          name: HIP-65426
+          dist: 109.2 # pc
+          age: 14.0 # Myr
+          sptype: A2V
+          teff: 8840.0 # K
+          feh: 0.00 # dex
+          logg: 4.50
+          kmag: 6.77 # mag (2MASS Ks)
+          vot: HIP-65426.vot # within wdir
+     ref:
+          name: HIP-68245
+          dist: 161.0 # pc
+          sptype: B2IV
+          teff: 21638.0 # K
+          feh: 0.00 # dex
+          logg: 4.08
+          kmag: 4.49 # mag (2MASS Ks)
+          vot: HIP-68245.vot # within wdir
+# name_witp = name in whereistheplanet
+# a list of available companions can be found at https://github.com/semaphoreP/whereistheplanet/blob/master/whereistheplanet/whereistheplanet.py
+# name_spec = name in species
+# a list of available companions can be found at https://github.com/tomasstolker/species/blob/master/species/data/companions.py
+companions:
+     c1:
+          name_witp: hip65426b
+          name_spec: HIP 65426 b
+          mass: 8.0 # M_Jupiter
+          sent: 13.0 # kB/baryon
+          ra_off: 418 # mas
+          de_off: -698 # mas
+pipeline:
+     model_spec: exo-rem
+     teff_range: 1000.0,2000.0
+     make_plots: True

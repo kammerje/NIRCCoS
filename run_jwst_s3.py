@@ -42,46 +42,99 @@ if (not os.path.exists(odir)):
 # Get JWST files.
 jfiles = [f for f in os.listdir(jdir) if f.endswith('_calints.fits')]
 jfiles = sorted(jfiles)
+mirage = []
+for i in range(len(jfiles)):
+    if (jfiles[i].startswith('pynrc_')):
+        mirage += [False]
+    else:
+        mirage += [True]
+mirage = np.array(mirage)
+if (mirage.all()):
+    mirage = True
+elif (np.logical_not(mirage).all()):
+    mirage = False
+else:
+    raise UserWarning('All files in '+jdir+' need to be of same type')
 
 # Make ASN files.
-afiles = []
-program = jfiles[0][2:7]
-asn_id = 'c0000'
-target = 't000'
-for i in range(len(config.obs['filter'])):
-    for j in range(len(config.obs['filter'][i][0])):
-        roll1files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][0]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
-        roll2files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][1]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
-        reffiles = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][2]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
-        afiles += ['seq_%03.0f' % (i+1)+'_filt_'+config.obs['filter'][i][0][j]+'.asn']
-        f = open(odir+afiles[-1], 'w')
-        f.write('{"asn_type": "coron3",\n')
-        f.write(' "asn_rule": "candidate_Asn_Coron",\n')
-        f.write(' "program": "'+program+'",\n')
-        f.write(' "asn_id": "'+asn_id+'",\n')
-        f.write(' "target": "'+target+'",\n')
-        f.write(' "asn_pool": "jw'+program+'_00000000T000000_pool",\n')
-        f.write(' "products": [\n')
-        name = 'jw'+program+'-'+asn_id+'_'+target+'_nircam_'+config.obs['filter'][i][0][j]+'-'+config.obs['pupil'][i][0]+'-'+config.obs['subarray'][i][0]
-        f.write('     {"name": "'+name.lower()+'",\n')
-        f.write('      "members": [\n')
-        for k in range(len(roll1files)):
-            f.write('          {"expname": "'+jdir+roll1files[k]+'",\n')
-            f.write('           "exptype": "science"\n')
-            f.write('          },\n')
-        for k in range(len(roll2files)):
-            f.write('          {"expname": "'+jdir+roll2files[k]+'",\n')
-            f.write('           "exptype": "science"\n')
-            f.write('          },\n')
-        for k in range(len(reffiles)):
-            f.write('          {"expname": "'+jdir+reffiles[k]+'",\n')
-            f.write('           "exptype": "psf"\n')
-            f.write('          },\n')
-        f.write('      ]\n')
-        f.write('     }\n')
-        f.write(' ]\n')
-        f.write('}\n')
-        f.close()
+if (mirage == True):
+    afiles = []
+    program = jfiles[0][2:7]
+    asn_id = 'c0000'
+    target = 't000'
+    for i in range(len(config.obs['filter'])):
+        for j in range(len(config.obs['filter'][i][0])):
+            roll1files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][0]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+            roll2files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][1]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+            reffiles = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][2]+'001' in f and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+            afiles += ['seq_%03.0f' % (i+1)+'_filt_'+config.obs['filter'][i][0][j]+'.asn']
+            f = open(odir+afiles[-1], 'w')
+            f.write('{"asn_type": "coron3",\n')
+            f.write(' "asn_rule": "candidate_Asn_Coron",\n')
+            f.write(' "program": "'+program+'",\n')
+            f.write(' "asn_id": "'+asn_id+'",\n')
+            f.write(' "target": "'+target+'",\n')
+            f.write(' "asn_pool": "jw'+program+'_00000000T000000_pool",\n')
+            f.write(' "products": [\n')
+            name = 'jw'+program+'-'+asn_id+'_'+target+'_nircam_'+config.obs['filter'][i][0][j]+'-'+config.obs['pupil'][i][0]+'-'+config.obs['subarray'][i][0]
+            f.write('     {"name": "'+name.lower()+'",\n')
+            f.write('      "members": [\n')
+            for k in range(len(roll1files)):
+                f.write('          {"expname": "'+jdir+roll1files[k]+'",\n')
+                f.write('           "exptype": "science"\n')
+                f.write('          },\n')
+            for k in range(len(roll2files)):
+                f.write('          {"expname": "'+jdir+roll2files[k]+'",\n')
+                f.write('           "exptype": "science"\n')
+                f.write('          },\n')
+            for k in range(len(reffiles)):
+                f.write('          {"expname": "'+jdir+reffiles[k]+'",\n')
+                f.write('           "exptype": "psf"\n')
+                f.write('          },\n')
+            f.write('      ]\n')
+            f.write('     }\n')
+            f.write(' ]\n')
+            f.write('}\n')
+            f.close()
+else:
+    afiles = []
+    program = jfiles[0][8:13]
+    asn_id = 'c0000'
+    target = 't000'
+    for i in range(len(config.obs['filter'])):
+        for j in range(len(config.obs['filter'][i][0])):
+            roll1files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][0]+'001' in f and pyfits.getheader(jdir+f, 0)['EXP_TYPE'] == 'NRC_CORON' and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+            roll2files = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][1]+'001' in f and pyfits.getheader(jdir+f, 0)['EXP_TYPE'] == 'NRC_CORON' and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+            reffiles = [f for f in os.listdir(jdir) if (f.endswith('_calints.fits') and '%03.0f' % config.obs['num'][i][2]+'001' in f and pyfits.getheader(jdir+f, 0)['EXP_TYPE'] == 'NRC_CORON' and pyfits.getheader(jdir+f, 0)['FILTER'] == config.obs['filter'][i][0][j])]
+            afiles += ['seq_%03.0f' % (i+1)+'_filt_'+config.obs['filter'][i][0][j]+'.asn']
+            f = open(odir+afiles[-1], 'w')
+            f.write('{"asn_type": "coron3",\n')
+            f.write(' "asn_rule": "candidate_Asn_Coron",\n')
+            f.write(' "program": "'+program+'",\n')
+            f.write(' "asn_id": "'+asn_id+'",\n')
+            f.write(' "target": "'+target+'",\n')
+            f.write(' "asn_pool": "jw'+program+'_00000000T000000_pool",\n')
+            f.write(' "products": [\n')
+            name = 'jw'+program+'-'+asn_id+'_'+target+'_nircam_'+config.obs['filter'][i][0][j]+'-'+config.obs['pupil'][i][0]+'-'+config.obs['subarray'][i][0]
+            f.write('     {"name": "'+name.lower()+'",\n')
+            f.write('      "members": [\n')
+            for k in range(len(roll1files)):
+                f.write('          {"expname": "'+jdir+roll1files[k]+'",\n')
+                f.write('           "exptype": "science"\n')
+                f.write('          },\n')
+            for k in range(len(roll2files)):
+                f.write('          {"expname": "'+jdir+roll2files[k]+'",\n')
+                f.write('           "exptype": "science"\n')
+                f.write('          },\n')
+            for k in range(len(reffiles)):
+                f.write('          {"expname": "'+jdir+reffiles[k]+'",\n')
+                f.write('           "exptype": "psf"\n')
+                f.write('          },\n')
+            f.write('      ]\n')
+            f.write('     }\n')
+            f.write(' ]\n')
+            f.write('}\n')
+            f.close()
 
 # Go through all ASN files.
 for i in range(len(afiles)):

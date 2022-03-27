@@ -251,10 +251,10 @@ class config():
         
         self.src = []
         sci = {}
-        keys = ['name', 'dist', 'age', 'sptype', 'teff', 'feh', 'logg', 'kmag']
+        keys = ['name', 'dist', 'age', 'sptype', 'teff', 'feh', 'logg', 'kmag', 'vot']
         for i in range(len(keys)):
             try:
-                if (keys[i] in ['name', 'sptype']):
+                if (keys[i] in ['name', 'sptype', 'vot']):
                     sci[keys[i]] = str(config['sources']['sci'][keys[i]])
                 else:
                     sci[keys[i]] = float(config['sources']['sci'][keys[i]])
@@ -262,10 +262,10 @@ class config():
                 raise UserWarning('Config file needs sources:sci:'+keys[i]+' entry')
         self.src += [sci]
         ref = {}
-        keys = ['name', 'sptype', 'teff', 'feh', 'logg', 'kmag']
+        keys = ['name', 'dist', 'sptype', 'teff', 'feh', 'logg', 'kmag', 'vot']
         for i in range(len(keys)):
             try:
-                if (keys[i] in ['name', 'sptype']):
+                if (keys[i] in ['name', 'sptype', 'vot']):
                     ref[keys[i]] = str(config['sources']['ref'][keys[i]])
                 else:
                     ref[keys[i]] = float(config['sources']['ref'][keys[i]])
@@ -412,6 +412,8 @@ class config():
             if (flag == False):
                 raise UserWarning('Source names in config file need to match target archive names in APT file')
             self.src[i]['icrs'] = str(src.getElementsByTagName('EquatorialCoordinates')[0].getAttribute('Value'))
+            self.src[i]['pmra'] = float(src.getElementsByTagName('RAProperMotion')[0].childNodes[0].data)
+            self.src[i]['pmde'] = float(src.getElementsByTagName('DecProperMotion')[0].childNodes[0].data)
         
         return None
     
