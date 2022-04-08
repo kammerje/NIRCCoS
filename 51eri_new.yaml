@@ -1,0 +1,68 @@
+paths:
+     wdir: 51Eri/ # working directory
+     pmdir: pmags/ # planet magnitudes directory (sub-directory of wdir)
+     pynrc_data_dir: pynrc_data/ # directory for pyNRC data (sub-directory of wdir)
+     pynrc_figs_dir: pynrc_figs/ # directory for pyNRC figures (sub-directory of wdir)
+     mirage_refs_dir: mirage_refs/ # directory for MIRAGE reference files
+     mirage_cats_dir: mirage_cats/ # directory for MIRAGE catalogs (sub-directory of wdir)
+     mirage_logs_dir: mirage_logs/ # directory for MIRAGE logs (sub-directory of wdir)
+     mirage_data_dir: mirage_data/ # directory for MIRAGE data (sub-directory of wdir)
+     jwst_s1s2_data_dir: jwst_s1s2_data/ # directory for JWST data (sub-directory of wdir)
+     jwst_s3_data_dir: jwst_s3_data/ # directory for JWST data (sub-directory of wdir)
+     species_dir: /Users/jkammerer/Documents/Code/species
+     whereistheplanet_dir: /Users/jkammerer/Documents/Code/whereistheplanet
+     webbpsf_ext_dir: /Users/jkammerer/Documents/Code/webbpsf_ext
+     pynrc_dir: /Users/jkammerer/Documents/Code/pynrc
+apt:
+     xml_path: 1412.xml # within wdir
+     pointing_path: 1412.pointing # within wdir
+observation:
+     date: 2022-10-20T00:00:00
+     pa_roll1: 292.0 # deg
+     pa_roll2: 292.0 # deg
+     pa_ref: 292.0 # deg
+     wfe_drift_roll1: 0.0 # nm
+     wfe_drift_roll2: 2.0 # nm
+     wfe_drift_ref: 1.0 # nm
+     oversample: 2
+     # observation numbers from APT
+     # an observing sequence consists of roll 1, roll 2, ref
+     sequences:
+          s1: 1,6,3
+          s2: 2,5,4
+sources:
+     sci:
+          name: 51-ERI
+          dist: 29.8 # pc
+          age: 26.0 # Myr
+          sptype: F0IV
+          teff: 7331.0 # K
+          feh: -0.12 # dex
+          logg: 3.95
+          kmag: 4.54 # mag (2MASS Ks)
+          vot: 51Eri.vot # within wdir
+     ref:
+          name: HD-30562
+          dist: 26.1 # pc
+          sptype: G2IV
+          teff: 5983.0 # K
+          feh: 0.23 # dex
+          logg: 4.14
+          kmag: 4.31 # mag (2MASS Ks)
+          vot: HD30562.vot # within wdir
+# name_witp = name in whereistheplanet
+# a list of available companions can be found at https://github.com/semaphoreP/whereistheplanet/blob/master/whereistheplanet/whereistheplanet.py
+# name_spec = name in species
+# a list of available companions can be found at https://github.com/tomasstolker/species/blob/master/species/data/companions.py
+companions:
+     c1:
+          name_witp: 51erib
+          name_spec: 51 Eri b
+          mass: 2.6 # M_Jupiter
+          sent: 10.0 # kB/baryon
+          ra_off: 297 # mas
+          de_off: 23 # mas
+pipeline:
+     model_spec: atmo
+     teff_range: 500.0,1500.0
+     make_plots: True
