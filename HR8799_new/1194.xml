@@ -454,6 +454,7 @@ Delta W1-W2 = -0.074</Comments>
                         </ncc:Filters>
                         <ncc:PsfReference>false</ncc:PsfReference>
                         <ncc:PsfReferenceObservation>Ref star - NIRCam - MASK430R (Obs 3)</ncc:PsfReferenceObservation>
+                        <ncc:PsfReferenceObservation>HR 8799 - NIRCam - Roll 2 - MASK430R (Obs 6)</ncc:PsfReferenceObservation>
                         <ncc:PsfJustification>false</ncc:PsfJustification>
                     </ncc:NircamCoron>
                 </Template>
@@ -802,6 +803,7 @@ Delta W1-W2 = -0.074</Comments>
                         </ncc:Filters>
                         <ncc:PsfReference>false</ncc:PsfReference>
                         <ncc:PsfReferenceObservation>Ref star - NIRCam - MASK430R (Obs 3)</ncc:PsfReferenceObservation>
+                        <ncc:PsfReferenceObservation>HR 8799 - NIRCam - Roll 1 - MASK430R (Obs 1)</ncc:PsfReferenceObservation>
                         <ncc:PsfJustification>false</ncc:PsfJustification>
                     </ncc:NircamCoron>
                 </Template>
@@ -829,8 +831,8 @@ Delta W1-W2 = -0.074</Comments>
             <Observation>HR 8799 - NIRCam - Roll 2 - MASK430R (Obs 6)</Observation>
             <Time></Time>
         </GroupWithinLink>
-        <OrientFromLink Mode="Aperture" PrimaryObs="HR 8799 - NIRCam - Roll 1 - MASK430R (Obs 1)" OrientFromObs="HR 8799 - NIRCam - Roll 2 - MASK430R (Obs 6)" MinAngle="-7 Degrees" MaxAngle="-14 Degrees"/>
-        <OrientFromLink Mode="Aperture" PrimaryObs="HR 8799 bcde - NIRCam - Roll 2 - MASKLWB (Obs 5)" OrientFromObs="HR 8799 bcde - NIRCam - Roll 1 - MASKLWB (Obs 2)" MinAngle="-7 Degrees" MaxAngle="-14 Degrees"/>
+        <OrientFromLink Mode="Aperture" PrimaryObs="HR 8799 - NIRCam - Roll 1 - MASK430R (Obs 1)" OrientFromObs="HR 8799 - NIRCam - Roll 2 - MASK430R (Obs 6)" MinAngle="7 Degrees" MaxAngle="14 Degrees"/>
+        <OrientFromLink Mode="Aperture" PrimaryObs="HR 8799 bcde - NIRCam - Roll 1 - MASKLWB (Obs 2)" OrientFromObs="HR 8799 bcde - NIRCam - Roll 2 - MASKLWB (Obs 5)" MinAngle="7 Degrees" MaxAngle="14 Degrees"/>
     </LinkingRequirements>
     <LimitedAccessParameters>
         <Entry Entity="Fiducial Point Override" Parameter="" Value=""/>

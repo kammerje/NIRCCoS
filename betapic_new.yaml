@@ -1,0 +1,75 @@
+paths:
+     wdir: betaPic/ # working directory
+     pmdir: pmags/ # planet magnitudes directory (sub-directory of wdir)
+     pynrc_data_dir: pynrc_data/ # directory for pyNRC data (sub-directory of wdir)
+     pynrc_figs_dir: pynrc_figs/ # directory for pyNRC figures (sub-directory of wdir)
+     mirage_refs_dir: mirage_refs/ # directory for MIRAGE reference files
+     mirage_cats_dir: mirage_cats/ # directory for MIRAGE catalogs (sub-directory of wdir)
+     mirage_logs_dir: mirage_logs/ # directory for MIRAGE logs (sub-directory of wdir)
+     mirage_data_dir: mirage_data/ # directory for MIRAGE data (sub-directory of wdir)
+     jwst_s1s2_data_dir: jwst_s1s2_data/ # directory for JWST data (sub-directory of wdir)
+     jwst_s3_data_dir: jwst_s3_data/ # directory for JWST data (sub-directory of wdir)
+     species_dir: /Users/jkammerer/Documents/Code/species
+     whereistheplanet_dir: /Users/jkammerer/Documents/Code/whereistheplanet
+     webbpsf_ext_dir: /Users/jkammerer/Documents/Code/webbpsf_ext
+     pynrc_dir: /Users/jkammerer/Documents/Code/pynrc
+apt:
+     xml_path: 1411.xml # within wdir
+     pointing_path: 1411.pointing # within wdir
+observation:
+     date: 2022-12-14T00:00:00
+     pa_roll1: 350.0 # deg
+     pa_roll2: 360.0 # deg
+     pa_ref: 340.0 # deg
+     wfe_drift_roll1: 1.0 # nm
+     wfe_drift_roll2: 2.0 # nm
+     wfe_drift_ref: 0.0 # nm
+     oversample: 2
+     # observation numbers from APT
+     # an observing sequence consists of roll 1, roll 2, ref
+     sequences:
+          s1: 6,5,1
+          s2: 3,4,2
+sources:
+     sci:
+          name: BETA-PIC
+          dist: 19.44 # pc
+          age: 23.0 # Myr
+          sptype: A6V
+          teff: 8052.0 # K
+          feh: 0.05 # dex
+          logg: 4.15
+          kmag: 3.48 # mag (2MASS Ks)
+          vot: BETA-PIC.vot # within wdir
+     ref:
+          name: ALPHA-PIC
+          dist: 29.6 # pc
+          sptype: A8V
+          teff: 7530.0 # K
+          feh: -0.11 # dex
+          logg: 3.48
+          kmag: 2.57 # mag (2MASS Ks)
+          vot: ALPHA-PIC.vot # within wdir
+# name_witp = name in whereistheplanet
+# a list of available companions can be found at https://github.com/semaphoreP/whereistheplanet/blob/master/whereistheplanet/whereistheplanet.py
+# name_spec = name in species
+# a list of available companions can be found at https://github.com/tomasstolker/species/blob/master/species/data/companions.py
+companions:
+     c1:
+          name_witp: betapicb
+          name_spec: beta Pic b
+          mass: 9.8 # M_Jupiter
+          sent: 10.0 # kB/baryon
+          ra_off: 281 # mas
+          de_off: 458 # mas
+     c2:
+          name_witp: betapicc
+          name_spec: beta Pic c
+          mass: 8.3 # M_Jupiter
+          sent: 10.0 # kB/baryon
+          ra_off: 6 # mas
+          de_off: 4 # mas
+pipeline:
+     model_spec: exo-rem
+     teff_range: 1000.0,2000.0
+     make_plots: True

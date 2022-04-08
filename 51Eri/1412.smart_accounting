@@ -6,14 +6,14 @@ charged an initial slew.
 
 Sequence   1:
 Visit ID     Smart Accounting Slew     APT Slew                  Target
- 001:001                      1800         1800                  HR8799
- 002:001                       166         1800                  HR8799
- 003:001                       646         1800                HD220657
- 004:001                       166         1800                HD220657
- 005:001                       910         1800                  HR8799
- 006:001                       175         1800                  HR8799
+ 001:001                      1800         1800                  51-ERI
+ 002:001                       361         1800                  51-ERI
+ 003:001                       620         1800                HD-30562
+ 004:001                       361         1800                HD-30562
+ 005:001                       620         1800                  51-ERI
+ 006:001                       361         1800                  51-ERI
 
-Total:                        3863        10800
+Total:                        4123        10800
 
 
 Each sequence shows the visits in the order that the smart accounting algorithm

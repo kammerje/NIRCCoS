@@ -256,7 +256,10 @@ if __name__ == '__main__':
                 visit_id = '%03.0f' % int(config.obs['ind'][i][k])+':001'
                 print('   Visit '+visit_id)
                 
-                apname = 'NRCA5_TA'+config.obs['mask'][i][k]
+                det = config.obs['detector'][i][k]
+                if (det == 'NRCALONG'):
+                    det = 'NRCA5'
+                apname = det+'_TA'+config.obs['mask'][i][k]
                 create_level1b_FITS(sim_config,
                                     dry_run=False,
                                     save_slope=True,
@@ -265,14 +268,14 @@ if __name__ == '__main__':
                                     apname=apname)
                 
                 if (config.obs['conf'][i][k] == True):
-                    apname = 'NRCA5_FULL_TA'+config.obs['mask'][i][k]
+                    apname = det+'_FULL_TA'+config.obs['mask'][i][k]
                     create_level1b_FITS(sim_config,
                                         dry_run=False,
                                         save_slope=True,
                                         save_dms=True,
                                         visit_id=visit_id,
                                         apname=apname)
-                    apname = 'NRCA5_FULL_'+config.obs['mask'][i][k]
+                    apname = det+'_FULL_'+config.obs['mask'][i][k]
                     create_level1b_FITS(sim_config,
                                         dry_run=False,
                                         save_slope=True,
