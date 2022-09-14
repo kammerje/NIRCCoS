@@ -136,6 +136,8 @@ else:
             f.write('}\n')
             f.close()
 
+afiles = [f for f in os.listdir(odir) if f.endswith('.asn')]
+
 # Go through all ASN files.
 for i in range(len(afiles)):
     
@@ -149,45 +151,45 @@ for i in range(len(afiles)):
     # 2 Outlier detection.
     result3.outlier_detection.skip = True
     result3.outlier_detection.save_results = False
-    result3.outlier_detection.weight_type = 'exptime'
-    result3.outlier_detection.pixfrac = 1.
-    result3.outlier_detection.kernel = 'square'
-    result3.outlier_detection.fillval = 'INDEF'
-    result3.outlier_detection.nlow = 0
-    result3.outlier_detection.nhigh = 0
-    result3.outlier_detection.maskpt = 0.7
-    result3.outlier_detection.grow = 1
-    result3.outlier_detection.snr = '4.0 3.0'
-    result3.outlier_detection.scale = '0.5 0.4'
-    result3.outlier_detection.backg = 0.
-    result3.outlier_detection.save_intermediate_results = False
-    result3.outlier_detection.resample_data = True
-    result3.outlier_detection.good_bits = '~DO_NOT_USE'
-    result3.outlier_detection.scale_detection = False
-    result3.outlier_detection.allowed_memory = None
+    # result3.outlier_detection.weight_type = 'exptime'
+    # result3.outlier_detection.pixfrac = 1.
+    # result3.outlier_detection.kernel = 'square'
+    # result3.outlier_detection.fillval = 'INDEF'
+    # result3.outlier_detection.nlow = 0
+    # result3.outlier_detection.nhigh = 0
+    # result3.outlier_detection.maskpt = 0.7
+    # result3.outlier_detection.grow = 1
+    # result3.outlier_detection.snr = '4.0 3.0'
+    # result3.outlier_detection.scale = '0.5 0.4'
+    # result3.outlier_detection.backg = 0.
+    # result3.outlier_detection.save_intermediate_results = False
+    # result3.outlier_detection.resample_data = True
+    # result3.outlier_detection.good_bits = '~DO_NOT_USE'
+    # result3.outlier_detection.scale_detection = False
+    # result3.outlier_detection.allowed_memory = None
     
     # 3 Align reference PSFs.
     result3.align_refs.skip = False
     result3.align_refs.save_results = False
-    result3.align_refs.median_box_length = 5
-    result3.align_refs.bad_bits = 'DO_NOT_USE'
+    # result3.align_refs.median_box_length = 5
+    # result3.align_refs.bad_bits = 'DO_NOT_USE'
     
     # 4 Reference PSF subtraction.
     result3.klip.skip = False
     result3.klip.save_results = False
-    result3.klip.truncate = 50
+    # result3.klip.truncate = 50
     
     # 5 Image combination.
     result3.resample.skip = False
     result3.save_results = True
-    result3.resample.pixfrac = 1.
-    result3.resample.kernel = 'square'
-    result3.resample.pixel_scale_ratio = 1.
-    result3.resample.fillval = 'INDEF'
-    result3.resample.weight_type = 'exptime'
-    result3.resample.single = False
-    result3.resample.blendheaders = True
-    result3.resample.allowed_memory = None
+    # result3.resample.pixfrac = 1.
+    # result3.resample.kernel = 'square'
+    # result3.resample.pixel_scale_ratio = 1.
+    # result3.resample.fillval = 'INDEF'
+    # result3.resample.weight_type = 'exptime'
+    # result3.resample.single = False
+    # result3.resample.blendheaders = True
+    # result3.resample.allowed_memory = None
     
     # Run Coron3Pipeline.
     result3.output_dir = odir

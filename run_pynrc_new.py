@@ -253,7 +253,7 @@ if __name__ == '__main__':
             
             # Create slope and DMS files.
             for k in range(len(config.obs['ind'][i])):
-                visit_id = '%03.0f' % int(config.obs['ind'][i][k])+':001'
+                visit_id = '%03.0f' % int(config.obs['num'][i][k])+':001'
                 print('   Visit '+visit_id)
                 
                 det = config.obs['detector'][i][k]

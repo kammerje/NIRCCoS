@@ -122,11 +122,11 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result1.refpix.skip = False
         result1.refpix.save_results = False
-        result1.refpix.odd_even_columns = True
-        result1.refpix.use_side_ref_pixels = True
-        result1.refpix.side_smoothing_length = 11
-        result1.refpix.side_gain = 1.
-        result1.refpix.odd_even_rows = True
+        # result1.refpix.odd_even_columns = True
+        # result1.refpix.use_side_ref_pixels = True
+        # result1.refpix.side_smoothing_length = 11
+        # result1.refpix.side_gain = 1.
+        # result1.refpix.odd_even_rows = True
         
         # 5 Linearity correction.
         # - SCI gets linearity corrected.
@@ -142,9 +142,9 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result1.persistence.skip = False
         result1.persistence.save_results = False
-        result1.persistence.input_trapsfilled = None
-        result1.persistence.flag_pers_cutoff = 40.
-        result1.persistence.save_persistence = None
+        # result1.persistence.input_trapsfilled = None
+        # result1.persistence.flag_pers_cutoff = 40.
+        # result1.persistence.save_persistence = None
         
         # 7 Dark subtraction.
         # - SCI gets dark subtracted.
@@ -155,22 +155,22 @@ for i in range(len(mfiles)):
         # - GROUPDQ remains unchanged.
         result1.dark_current.skip = False
         result1.dark_current.save_results = False
-        result1.dark_current.dark_output = None
+        # result1.dark_current.dark_output = None
         
         # 8 Jump detection.
         # - DOES NOTHING.
         result1.jump.skip = False
         result1.jump.save_results = False
-        result1.jump.rejection_threshold = 4.
-        result1.jump.three_group_rejection_threshold = 6.
-        result1.jump.four_group_rejection_threshold = 5.
+        # result1.jump.rejection_threshold = 4.
+        # result1.jump.three_group_rejection_threshold = 6.
+        # result1.jump.four_group_rejection_threshold = 5.
         # result1.jump.rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
         # result1.jump.three_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
         # result1.jump.four_group_rejection_threshold = 50. # use larger value for coronagraphic subarrays based on simulated data
-        result1.jump.maximum_cores = 'none'
-        result1.jump.flag_4_neighbors = True
-        result1.jump.max_jump_to_flag_neighbors = 1000.
-        result1.jump.min_jump_to_flag_neighbors = 10.
+        # result1.jump.maximum_cores = 'none'
+        # result1.jump.flag_4_neighbors = True
+        # result1.jump.max_jump_to_flag_neighbors = 1000.
+        # result1.jump.min_jump_to_flag_neighbors = 10.
         
         # 9 Slope fitting.
         # - SCI gets collapsed along ngroup axis.
@@ -185,10 +185,10 @@ for i in range(len(mfiles)):
         # - NOTE: DQ combines PIXELDQ and GROUPDQ bad pixels.
         result1.ramp_fit.skip = False
         result1.save_results = True
-        result1.ramp_fit.save_opt = False
-        result1.ramp_fit.opt_name = None
-        result1.ramp_fit.int_name = None
-        result1.ramp_fit.maximum_cores = 'none'
+        # result1.ramp_fit.save_opt = False
+        # result1.ramp_fit.opt_name = None
+        # result1.ramp_fit.int_name = None
+        # result1.ramp_fit.maximum_cores = 'none'
         
         # Run Detector1Pipeline.
         result1.output_dir = odir
@@ -256,7 +256,7 @@ for i in range(len(mfiles)):
         # - DQ combines science and flat field DQs.
         result2.flat_field.skip = False
         result2.flat_field.save_results = False
-        result2.flat_field.save_interpolated_flat = False
+        # result2.flat_field.save_interpolated_flat = False
         
         # 4 Flux calibration.
         # - SCI gets flux calibrated.
@@ -271,14 +271,14 @@ for i in range(len(mfiles)):
         # - DOES NOTHING.
         result2.resample.skip = False
         result2.save_results = True
-        result2.resample.pixfrac = 1.
-        result2.resample.kernel = 'square'
-        result2.resample.pixel_scale_ratio = 1.
-        result2.resample.fillval = 'INDEF'
-        result2.resample.weight_type = 'exptime'
-        result2.resample.single = False
-        result2.resample.blendheaders = True
-        result2.resample.allowed_memory = None
+        # result2.resample.pixfrac = 1.
+        # result2.resample.kernel = 'square'
+        # result2.resample.pixel_scale_ratio = 1.
+        # result2.resample.fillval = 'INDEF'
+        # result2.resample.weight_type = 'exptime'
+        # result2.resample.single = False
+        # result2.resample.blendheaders = True
+        # result2.resample.allowed_memory = None
         
         # Run Image2Pipeline.
         result2.output_dir = odir
